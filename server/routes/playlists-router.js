@@ -14,6 +14,7 @@ const PlaylistMiddleware = require("../middleware/playlistMiddleware");
 router.use(auth.verify);
 
 // Any action with playlist id (delete,update,get) for unpublished playlist should be verified
+
 router.use(
   "/:id",
   PlaylistMiddleware.attachPlaylist,
@@ -27,8 +28,6 @@ router.get("/playlistpairs", PlaylistController.getPlaylistPairs);
 router.get("/", PlaylistController.getPlaylists);
 router.put(
   "/:id",
-  auth.verify,
-  PlaylistMiddleware.attachPlaylist,
   PlaylistMiddleware.verifyUnpublished,
   PlaylistController.updatePlaylist
 );

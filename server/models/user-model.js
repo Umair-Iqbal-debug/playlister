@@ -12,10 +12,10 @@ const UserSchema = new Schema(
     playlists: [
       {
         name: String,
-        count: Number,
         _id: { type: ObjectId, ref: "Playlist" },
       },
     ],
+    count: { type: Number, default: 0 },
   },
   { timestamps: true }
 );

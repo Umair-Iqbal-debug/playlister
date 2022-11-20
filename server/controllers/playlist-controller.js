@@ -30,8 +30,8 @@ createPlaylist = async (req, res) => {
 
   // if they do increase the counter of the original by one and create new list with name + counter
   if (duplicate) {
-    duplicate.count += 1;
-    newPlaylist.name = `${newPlaylist.name} (${duplicate.count})`;
+    user.count += 1;
+    newPlaylist.name = `${newPlaylist.name} (${user.count})`;
   }
 
   newPlaylist.userId = req.userId;
@@ -39,9 +39,11 @@ createPlaylist = async (req, res) => {
 
   const savedPlaylist = await newPlaylist.save();
 
+  // keep global counter instead of what you have
+
   user.playlists = [
     ...userOwnedPlaylists,
-    { _id: savedPlaylist._id, name: savedPlaylist.name, count: 0 },
+    { _id: savedPlaylist._id, name: savedPlaylist.name },
   ];
 
   await user.save();
@@ -53,6 +55,13 @@ deletePlaylist = async (req, res) => {
   // we already know the playlists exists and belongs to the user just delete it
   try {
     const deletedPlaylist = await Playlist.findByIdAndDelete(req.params.id);
+    const user = await User.findById(req.userId);
+
+    user.playlists = user.playlists.filter(
+      (playlist) => playlist._id != req.params.id
+    );
+    await user.save();
+
     return res.status(201).json({ success: true, playlist: deletedPlaylist });
   } catch (error) {
     return res.status(400).json({ success: false, errorMessage: err });
@@ -60,7 +69,7 @@ deletePlaylist = async (req, res) => {
 };
 
 getPlaylistById = async (req, res) => {
-  return res.status(200).json({ success: true, playlist: res.playlist });
+  return res.status(200).json({ success: true, playlist: req.playlist });
 };
 
 getPlaylistPairs = async (req, res) => {
@@ -99,67 +108,40 @@ getPlaylistPairs = async (req, res) => {
 };
 
 getPlaylists = async (req, res) => {
-  const playlists = Playlist.find({});
+  const queryObj = { userId: req.userId };
+  if (req.query.name) queryObj.name = { $regex: req.query.name, $options: "i" };
+
+  const playlists = await Playlist.find(queryObj);
+  return res.status(200).json({ success: true, playlists: playlists });
 };
+
 updatePlaylist = async (req, res) => {
   const body = req.body;
   console.log("updatePlaylist: " + JSON.stringify(body));
   console.log("req.body.name: " + req.body.name);
 
-  if (!body) {
+  if (!body || body.name === undefined || body.songs === undefined) {
     return res.status(400).json({
       success: false,
       error: "You must provide a body to update",
     });
   }
 
-  Playlist.findOne({ _id: req.params.id }, (err, playlist) => {
-    console.log("playlist found: " + JSON.stringify(playlist));
-    if (err) {
-      return res.status(404).json({
-        err,
-        message: "Playlist not found!",
-      });
-    }
+  const { name, songs } = body;
 
-    // DOES THIS LIST BELONG TO THIS USER?
-    async function asyncFindUser(list) {
-      await User.findOne({ email: list.ownerEmail }, (err, user) => {
-        console.log("user._id: " + user._id);
-        console.log("req.userId: " + req.userId);
-        if (user._id == req.userId) {
-          console.log("correct user!");
-          console.log("req.body.name: " + req.body.name);
+  req.playlist.name = name;
+  req.playlist.songs = songs;
 
-          list.name = body.playlist.name;
-          list.songs = body.playlist.songs;
-          list
-            .save()
-            .then(() => {
-              console.log("SUCCESS!!!");
-              return res.status(200).json({
-                success: true,
-                id: list._id,
-                message: "Playlist updated!",
-              });
-            })
-            .catch((error) => {
-              console.log("FAILURE: " + JSON.stringify(error));
-              return res.status(404).json({
-                error,
-                message: "Playlist not updated!",
-              });
-            });
-        } else {
-          console.log("incorrect user!");
-          return res
-            .status(400)
-            .json({ success: false, description: "authentication error" });
-        }
-      });
-    }
-    asyncFindUser(playlist);
-  });
+  if (req.body.isPublished) {
+    req.playlist.isPublished = { status: true, date: Date.now() };
+  }
+
+  try {
+    const updatedPlaylist = await req.playlist.save();
+    res.status(200).json({ success: true, playlist: updatedPlaylist });
+  } catch (err) {
+    return res.status(500).json({ success: false, errorMessage: err });
+  }
 };
 
 module.exports = {
