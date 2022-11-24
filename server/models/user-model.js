@@ -16,6 +16,17 @@ const UserSchema = new Schema(
       },
     ],
     count: { type: Number, default: 0 },
+    likes: {
+      type: [
+        {
+          like: Boolean,
+          dislike: Boolean,
+          playlistId: { type: ObjectId, ref: "Playlist" },
+        },
+      ],
+      required: true,
+      default: [],
+    },
   },
   { timestamps: true }
 );

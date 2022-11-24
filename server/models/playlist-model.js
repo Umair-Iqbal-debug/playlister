@@ -11,8 +11,13 @@ const ObjectId = Schema.Types.ObjectId;
 const playlistSchema = new Schema(
   {
     name: { type: String, required: true },
-    ownerEmail: { type: String, required: true },
-    userId: { type: ObjectId, ref: "User" },
+    user: {
+      email: { type: String, required: true },
+      userId: { type: ObjectId, ref: "User" },
+      firstName: { type: String, required: true },
+      lastName: { type: String, required: true },
+      username: { type: String, required: true },
+    },
     songs: {
       type: [
         {
@@ -30,18 +35,6 @@ const playlistSchema = new Schema(
         {
           text: String,
           username: String,
-        },
-      ],
-      required: true,
-      default: [],
-    },
-
-    likes: {
-      type: [
-        {
-          like: Boolean,
-          dislike: Boolean,
-          userId: { type: ObjectId, ref: "User" },
         },
       ],
       required: true,

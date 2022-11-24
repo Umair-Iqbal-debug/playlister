@@ -34,8 +34,13 @@ createPlaylist = async (req, res) => {
     newPlaylist.name = `${newPlaylist.name} (${user.count})`;
   }
 
-  newPlaylist.userId = req.userId;
-  newPlaylist.ownerEmail = user.email;
+  newPlaylist.user = {
+    email: user.email,
+    firstName: user.firstName,
+    lastName: user.lastName,
+    userId: user._id,
+    username: user.username,
+  };
 
   const savedPlaylist = await newPlaylist.save();
 
@@ -108,7 +113,7 @@ getPlaylistPairs = async (req, res) => {
 };
 
 getPlaylists = async (req, res) => {
-  const queryObj = { userId: req.userId };
+  const queryObj = { "user.userId": req.userId };
   if (req.query.name) queryObj.name = { $regex: req.query.name, $options: "i" };
 
   const playlists = await Playlist.find(queryObj);
@@ -131,6 +136,8 @@ updatePlaylist = async (req, res) => {
 
   req.playlist.name = name;
   req.playlist.songs = songs;
+
+  console.log(body);
 
   if (req.body.isPublished) {
     req.playlist.isPublished = { status: true, date: Date.now() };

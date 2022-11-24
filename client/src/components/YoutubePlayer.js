@@ -1,20 +1,24 @@
-import { Button, Typography, Box } from "@mui/material";
-import React, { useEffect, useState } from "react";
+import { Button, Typography, Box, Card } from "@mui/material";
+import React, { useContext, useEffect, useState } from "react";
 import PlayerControls from "./PlayerControls";
+import CircularProgress from "@mui/material/CircularProgress";
+import GlobalStoreContext from "../store";
 
 function YoutubePlayer(props) {
+  const { store } = useContext(GlobalStoreContext);
+
+  useEffect(() => {
+    if (store.currentList && store.currentList.songs) {
+      setCurrentList(store.currentList.songs);
+      // setCurrentIdx(0);
+    } else {
+      if (player && player.loadVideoById) player.loadVideoById("");
+    }
+  }, [store.currentList]);
+
   const [player, setPlayer] = useState(null);
 
-  const [currentList, setCurrentList] = useState([
-    "ntn6q-ODULo",
-    "vJMMf-z25I0",
-    "e0_V8IoYSLU",
-    "x1XuN5Rq2ws",
-    "mqmxkGjow1A",
-    "8UbNbor3OqQ",
-    "THL1OPn72vo",
-    "jGcgCa_WuRQ",
-  ]);
+  const [currentList, setCurrentList] = useState([]);
 
   const [shuffle, setShuffle] = useState(false);
 
@@ -23,7 +27,16 @@ function YoutubePlayer(props) {
   const [playerState, setPlayerState] = useState(-1);
 
   useEffect(() => {
-    if (window.YT) return;
+    console.log(store.currentSongIndex);
+    if (store && store.currentSongIndex !== undefined) {
+      setCurrentIdx(store.currentSongIndex);
+    }
+  }, [store.currentSongIndex]);
+
+  useEffect(() => {
+    if (window.YT) {
+      return;
+    }
     var tag = document.createElement("script");
     tag.src = "https://www.youtube.com/iframe_api";
     window.onYouTubeIframeAPIReady = onYouTubeIframeAPIReady;
@@ -40,8 +53,14 @@ function YoutubePlayer(props) {
   }, []);
 
   useEffect(() => {
-    if (player && player.loadVideoById && currentList) {
-      player.loadVideoById(currentList[currentIdx]);
+    if (
+      player &&
+      player.loadVideoById &&
+      currentList &&
+      currentIdx > -1 &&
+      currentList[currentIdx]
+    ) {
+      player.loadVideoById(currentList[currentIdx].youTubeId);
     }
   }, [currentIdx, player, currentList]);
 
@@ -90,21 +109,20 @@ function YoutubePlayer(props) {
   };
 
   const getRandom = () => {
-    setCurrentIdx((prev) => Math.floor(Math.random() * currentList.length));
+    store.setCurrentIdx(Math.floor(Math.random() * currentList.length));
   };
   const handleNext = () => {
-    setCurrentIdx((prev) => (prev + 1) % currentList.length);
+    store.setCurrentIdx((store.currentSongIndex + 1) % currentList.length);
   };
 
   const handlePrev = () => {
-    setCurrentIdx((prev) => {
-      let newCount = prev - 1;
-      if (newCount < 0) return newCount + currentList.length;
-      return newCount;
-    });
+    let prev = store.currentSongIndex;
+    let newCount = prev - 1;
+    if (newCount < 0) newCount += currentList.length;
+    store.setCurrentIdx(newCount);
   };
   const handleClick = () => {
-    setCurrentIdx(0);
+    store.addNewSong();
   };
 
   const style = {
@@ -115,38 +133,44 @@ function YoutubePlayer(props) {
     backgroundColor: "#d4d4f5",
     borderRadius: "4px",
     gap: "1rem",
+    height: "600px",
+    width: "100% ",
   };
 
+  let title = "",
+    artist = "",
+    playlistName = "";
+  if (currentIdx > -1 && currentList.length > 0) {
+    let song = currentList[currentIdx];
+    if (song) {
+      title = song.title;
+      artist = song.artist;
+      playlistName = currentList.name;
+    }
+  }
+
   return (
-    <Box style={style}>
-      <div id="player"></div>
+    <Box sx={style}>
+      <div id="player">
+        <CircularProgress />
+      </div>
       <Typography variant="h5">Now Playing</Typography>
       <Box sx={{ textAlign: "left" }}>
         <Typography variant="subtitle2">
-          Playlist: Songs To make you cry
+          Playlist: {store.currentList && store.currentList.name}
         </Typography>
         <Typography variant="subtitle2">Song#: {currentIdx + 1}</Typography>
-        <Typography variant="subtitle2">
-          Title: Last Day of Our Acquaintance
-        </Typography>
-        <Typography variant="subtitle2">Artist: Sinead O'Connor</Typography>
-        <PlayerControls
-          player={player}
-          handleNext={handleNext}
-          handlePrev={handlePrev}
-          toggleShuffle={toggleShuffle}
-          shuffle={shuffle}
-        />
+        <Typography variant="subtitle2">Title:{title}</Typography>
+        <Typography variant="subtitle2">Artist: {artist}</Typography>
       </Box>
+      <PlayerControls
+        player={player}
+        handleNext={handleNext}
+        handlePrev={handlePrev}
+        toggleShuffle={toggleShuffle}
+        shuffle={shuffle}
+      />
       <Button onClick={handleClick}>Select playlist</Button>
-
-      {currentList.map((_, idx) => {
-        return (
-          <Button variant="outlined" onClick={() => setCurrentIdx(idx)}>
-            {idx + 1}
-          </Button>
-        );
-      })}
     </Box>
   );
 }

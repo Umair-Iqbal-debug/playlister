@@ -14,7 +14,7 @@ attachPlaylist = async (req, res, next) => {
 };
 
 verifyPlaylistOwner = (req, res, next) => {
-  if (req.playlist.userId != req.userId)
+  if (req.playlist.user.userId != req.userId)
     return res
       .status(401)
       .json({ success: false, errorMessage: "Unauthorised" });
