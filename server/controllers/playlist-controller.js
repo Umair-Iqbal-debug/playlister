@@ -28,6 +28,9 @@ createPlaylist = async (req, res) => {
     (playlist) => playlist.name === newPlaylist.name
   );
 
+  console.log(body);
+  console.log(userOwnedPlaylists);
+
   // if they do increase the counter of the original by one and create new list with name + counter
   if (duplicate) {
     user.count += 1;
@@ -62,9 +65,12 @@ deletePlaylist = async (req, res) => {
     const deletedPlaylist = await Playlist.findByIdAndDelete(req.params.id);
     const user = await User.findById(req.userId);
 
+    // fix it to check using name instead
+
     user.playlists = user.playlists.filter(
-      (playlist) => playlist._id != req.params.id
+      (playlist) => playlist.name !== deletedPlaylist.name
     );
+
     await user.save();
 
     return res.status(201).json({ success: true, playlist: deletedPlaylist });

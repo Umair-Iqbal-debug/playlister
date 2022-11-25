@@ -39,7 +39,7 @@ export const GlobalStoreActionType = {
 // WE'LL NEED THIS TO PROCESS TRANSACTIONS
 const tps = new jsTPS();
 
-const CurrentModal = {
+export const CurrentModal = {
   NONE: "NONE",
   DELETE_LIST: "DELETE_LIST",
   EDIT_SONG: "EDIT_SONG",
@@ -361,6 +361,17 @@ function GlobalStoreContextProvider(props) {
     asyncCreateNewList();
   };
 
+  store.duplicateCurrentList = function () {
+    async function asyncDuplicateList() {
+      const { name, songs } = store.currentList;
+      let response = await api.createPlaylist(name, songs, auth.user.email);
+      store.loadIdNamePairs();
+      history("/");
+    }
+
+    asyncDuplicateList();
+  };
+
   // THIS FUNCTION LOADS ALL THE ID, NAME PAIRS SO WE CAN LIST ALL THE LISTS
   store.loadIdNamePairs = function () {
     async function asyncLoadIdNamePairs() {
@@ -399,13 +410,27 @@ function GlobalStoreContextProvider(props) {
   store.unmarkListForDeletion = function () {
     store.hideModals();
   };
+
+  store.publishCurrentList = function () {
+    const updateStore = async () => {
+      store.currentList.isPublished.status = true;
+
+      const response = await api.updatePlaylistById(
+        store.currentList._id,
+        store.currentList
+      );
+
+      store.loadIdNamePairs();
+      history("/");
+    };
+
+    updateStore();
+  };
   store.deleteList = function (id) {
     async function processDelete(id) {
       let response = await api.deletePlaylistById(id);
-      if (response.statusText === "OK") {
-        store.loadIdNamePairs();
-        history.push("/");
-      }
+      store.loadIdNamePairs();
+      history("/");
     }
     processDelete(id);
   };
@@ -472,6 +497,7 @@ function GlobalStoreContextProvider(props) {
       try {
         let response = await api.getPlaylistById(id);
         let playlist = response.data.playlist;
+
         storeReducer({
           type: GlobalStoreActionType.SET_CURRENT_LIST,
           payload: playlist,
@@ -488,6 +514,7 @@ function GlobalStoreContextProvider(props) {
       try {
         let response = await api.getPublishedPlaylistsById(id);
         let playlist = response.data.playlist;
+        tps.clearAllTransactions();
         storeReducer({
           type: GlobalStoreActionType.SET_CURRENT_LIST,
           payload: playlist,

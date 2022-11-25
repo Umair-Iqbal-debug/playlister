@@ -1,9 +1,7 @@
-import { useContext, useEffect } from "react";
+import { useContext } from "react";
 import SongCard from "./SongCard.js";
-import MUIEditSongModal from "./MUIEditSongModal";
-import MUIRemoveSongModal from "./MUIRemoveSongModal";
 import Box from "@mui/material/Box";
-import { List, Button } from "@mui/material";
+import { List } from "@mui/material";
 import { GlobalStoreContext } from "../store/index.js";
 
 /*
@@ -15,24 +13,22 @@ import { GlobalStoreContext } from "../store/index.js";
 function WorkspaceScreen({ playlist }) {
   const { store } = useContext(GlobalStoreContext);
 
-  let modalJSX = "";
-  if (store.isEditSongModalOpen()) {
-    modalJSX = <MUIEditSongModal />;
-  } else if (store.isRemoveSongModalOpen()) {
-    modalJSX = <MUIRemoveSongModal />;
-  }
-
   return (
-    <Box>
+    <Box sx={{ overflow: "scroll", maxHeight: "400px" }}>
       <List sx={{ overflow: "scroll", height: "400px" }}>
         {store.currentList &&
           store.currentList._id === playlist._id &&
           store.currentList.songs.map((song, idx) => {
-            return <SongCard song={song} index={idx} />;
+            return (
+              <SongCard
+                id={"playlist-song-" + idx}
+                key={"playlist-song-" + idx}
+                song={song}
+                index={idx}
+              />
+            );
           })}
       </List>
-
-      {modalJSX}
     </Box>
   );
 }

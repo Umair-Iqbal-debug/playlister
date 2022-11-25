@@ -2,37 +2,50 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  height: 70%;
+  height: 100%;
   width: 100%;
   background-color: #c4c4c4;
   border: "2px solid red";
   /* transform: scale(90%); */
 }
 
-body {
-  /* padding: 1em; */
+#root {
+  position: absolute;
+  /* width: 80%; */
+  left: 10%;
+  height: 93%;
+  top: 5%;
+  border: "2px solid red";
 }
+
+.main-content {
+  display: grid;
+  grid-template-columns: 60% 40%;
+  grid-row: 3/4;
+  grid-column: span 12;
+}
+
+/* html {
+  height: 100%;
+  width: 100%;
+}
+
+body {
+  height: 100%;
+  width: 100%;
+} */
 
 .container {
   display: grid;
   grid-template-columns: repeat(12, 1fr);
-  grid-template-rows: 10% 10% 70% 10%;
-  height: 80%;
+  grid-template-rows: 5% 10% 75% 10%;
+  padding: 1em;
+  height: 100%;
 }
 
 .nav-bar {
   grid-column: span 12;
   grid-row: 2/3;
-}
-
-.playlists {
-  grid-column: span 8;
-  grid-row: 3/ -2;
-}
-
-.youtube-player {
-  grid-column: span 4;
-  grid-row: 3/ -2;
 }
 
 .status-bar {

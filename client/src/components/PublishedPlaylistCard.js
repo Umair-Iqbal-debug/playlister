@@ -11,6 +11,7 @@ import ThumbUpAltIcon from "@mui/icons-material/ThumbUpAlt";
 import GlobalStoreContext from "../store";
 import SongCard from "./SongCard";
 import WorkspaceScreen from "./WorkspaceScreen";
+import Toolbar from "./Toolbar";
 
 export default function PublishedPlaylistCard({ playlist }) {
   const [likeStatus, setLikeStatus] = React.useState(0);
@@ -51,19 +52,7 @@ export default function PublishedPlaylistCard({ playlist }) {
     }
   };
 
-  const handleDuplicate = (e) => {
-    e.stopPropagation();
-
-    //store.duplicate()
-  };
-
-  const handleDelete = (e) => {
-    e.stopPropagation();
-
-    //store.delete()
-  };
-
-  const formateDate = (date) => "Jan 5, 2019";
+  const formateDate = (date) => date;
 
   const details = (
     <div style={{ display: "relative", marginTop: "auto" }}>
@@ -153,30 +142,9 @@ export default function PublishedPlaylistCard({ playlist }) {
 
         <AccordionDetails>
           <Box sx={{ display: "flex", flexDirection: "column" }}>
-            {/* {store.currentList &&
-              store.currentList._id === playlist._id &&
-              store.currentList.songs.map((song, idx) => {
-                return <SongCard song={song} index={idx} />;
-              })} */}
-
             <WorkspaceScreen playlist={playlist} />
-            <Box>
-              <Button
-                sx={{ float: "right" }}
-                onClick={handleDelete}
-                variant="outlined"
-              >
-                Delete
-              </Button>
-              <Button
-                sx={{ float: "right" }}
-                onClick={handleDuplicate}
-                variant="outlined"
-              >
-                duplicate
-              </Button>
-            </Box>
           </Box>
+          <Toolbar />
           {expanded && details}
         </AccordionDetails>
       </Accordion>

@@ -3,6 +3,7 @@ import React, { useContext, useEffect, useState } from "react";
 import PlayerControls from "./PlayerControls";
 import CircularProgress from "@mui/material/CircularProgress";
 import GlobalStoreContext from "../store";
+import { CurrentModal } from "../store";
 
 function YoutubePlayer(props) {
   const { store } = useContext(GlobalStoreContext);
@@ -27,7 +28,6 @@ function YoutubePlayer(props) {
   const [playerState, setPlayerState] = useState(-1);
 
   useEffect(() => {
-    console.log(store.currentSongIndex);
     if (store && store.currentSongIndex !== undefined) {
       setCurrentIdx(store.currentSongIndex);
     }

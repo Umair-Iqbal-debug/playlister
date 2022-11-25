@@ -49,6 +49,7 @@ export const updatePlaylistById = (id, playlist) => {
   return api.put(`/playlists/${id}`, {
     name: playlist.name,
     songs: playlist.songs,
+    isPublished: playlist.isPublished.status,
   });
 };
 

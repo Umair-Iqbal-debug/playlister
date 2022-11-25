@@ -3,14 +3,23 @@ import Accordion from "@mui/material/Accordion";
 import AccordionSummary from "@mui/material/AccordionSummary";
 import AccordionDetails from "@mui/material/AccordionDetails";
 import Typography from "@mui/material/Typography";
-import { Box } from "@mui/material";
+import { Box, Button, IconButton } from "@mui/material";
 import GlobalStoreContext from "../store";
-import SongCard from "./SongCard";
+import Add from "@mui/icons-material/Add";
+import WorkspaceScreen from "./WorkspaceScreen";
+
+import Toolbar from "./Toolbar";
 
 export default function PlaylistCard({ playlist }) {
   const { store } = useContext(GlobalStoreContext);
 
   const { name, _id } = playlist;
+
+  const handleAdd = (e) => {
+    e.stopPropagation();
+    e.preventDefault();
+    store.addNewSong();
+  };
 
   const handLoadList = (e) => {
     if (store.currentList && store.currentList._id == _id) {
@@ -70,11 +79,15 @@ export default function PlaylistCard({ playlist }) {
         </AccordionSummary>
         <AccordionDetails>
           <Box sx={{ display: "flex", flexDirection: "column" }}>
-            {store.currentList &&
-              store.currentList._id === playlist._id &&
-              store.currentList.songs.map((song, idx) => {
-                return <SongCard key={idx} song={song} index={idx} />;
-              })}
+            <WorkspaceScreen playlist={playlist} />
+            <Button
+              onClick={handleAdd}
+              variant="filled"
+              sx={{ backgroundColor: "#2c2f70" }}
+            >
+              <Add fontSize="large" />
+            </Button>
+            <Toolbar />
           </Box>
         </AccordionDetails>
       </Accordion>
