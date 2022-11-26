@@ -3,7 +3,7 @@ import { UndoRounded, RedoRounded } from "@mui/icons-material";
 import ContentCopyIcon from "@mui/icons-material/ContentCopy";
 import PublishIcon from "@mui/icons-material/Publish";
 import DeleteIcon from "@mui/icons-material/Delete";
-import { Box, ButtonGroup, IconButton } from "@mui/material";
+import { Box, ButtonGroup, Button } from "@mui/material";
 import GlobalStoreContext from "../store";
 import AuthContext from "../auth";
 
@@ -41,25 +41,33 @@ function Toolbar() {
 
   const undoRedo = (
     <ButtonGroup>
-      <IconButton onClick={handleUndo}>
+      <Button
+        disabled={!store.canUndo()}
+        variant="contained"
+        onClick={handleUndo}
+      >
         <UndoRounded sx={{ color: color }} fontSize="large" />
-      </IconButton>
+      </Button>
 
-      <IconButton onClick={handleRedo}>
+      <Button
+        disabled={!store.canRedo()}
+        variant="contained"
+        onClick={handleRedo}
+      >
         <RedoRounded fontSize="large" />
-      </IconButton>
+      </Button>
     </ButtonGroup>
   );
   const publishBtn = (
-    <IconButton onClick={handlePublish}>
+    <Button variant="contained" onClick={handlePublish}>
       <PublishIcon fontSize="large" />
-    </IconButton>
+    </Button>
   );
 
   const deleteBtn = (
-    <IconButton onClick={handleDeleteList}>
+    <Button variant="contained" onClick={handleDeleteList}>
       <DeleteIcon fontSize="large" />
-    </IconButton>
+    </Button>
   );
 
   const isOwner =
@@ -70,9 +78,9 @@ function Toolbar() {
   console.log(isOwner);
 
   const duplicateBtn = (
-    <IconButton onClick={handleDuplicate}>
+    <Button onClick={handleDuplicate}>
       <ContentCopyIcon fontSize="large" />
-    </IconButton>
+    </Button>
   );
 
   return (

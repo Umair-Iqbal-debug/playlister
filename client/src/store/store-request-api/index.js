@@ -39,8 +39,8 @@ export const searchOwnedPlaylists = (name) =>
 
 export const searchPublishedPlaylists = (name, username) => {
   const opts = {};
-  if (name) opts.name = name;
-  if (username) opts.username = username;
+  if (name && name.length > 0) opts.name = name;
+  if (username && username.length > 0) opts.username = username;
 
   return api.get("/publishedPlaylists", { params: opts });
 };
@@ -57,6 +57,18 @@ export const getAllPublishedPlaylists = () => {
   return api.get("/publishedPlaylists");
 };
 
+export const postComment = (id, text) => {
+  return api.post(`publishedPlaylists/comments/${id}`, {
+    text: text,
+  });
+};
+
+export const postLikeStatus = (id, likeStatus) => {
+  return api.post(`publishedPlaylists/like/${id}`, {
+    likeStatus: likeStatus,
+  });
+};
+
 const apis = {
   createPlaylist,
   deletePlaylistById,
@@ -67,6 +79,8 @@ const apis = {
   searchPublishedPlaylists,
   getAllPublishedPlaylists,
   getPublishedPlaylistsById,
+  postComment,
+  postLikeStatus,
 };
 
 export default apis;

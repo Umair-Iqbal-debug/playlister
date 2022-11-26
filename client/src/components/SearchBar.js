@@ -7,6 +7,8 @@ import Groups2RoundedIcon from "@mui/icons-material/Groups2Rounded";
 import PersonOutlineRoundedIcon from "@mui/icons-material/PersonOutlineRounded";
 import PersonRoundedIcon from "@mui/icons-material/PersonRounded";
 import { SearchMode } from "../store";
+import Menu from "@mui/material/Menu";
+import MenuItem from "@mui/material/MenuItem";
 
 // for sorting menu
 import SortOutlinedIcon from "@mui/icons-material/SortOutlined";
@@ -20,10 +22,8 @@ function SearchBar(props) {
   const searchMode = store.searchMode;
   const setSearchMode = store.setSearchMode;
 
-  // const [searchMode, setSearchMode] = useState("HOME");
-  console.log(store.searchMode);
-
   const [searchText, setSearchText] = useState("");
+  const [anchorEl, setAnchorEl] = React.useState(null);
 
   const handleSearchTextChange = (e) => {
     setSearchText(e.target.value);
@@ -31,9 +31,40 @@ function SearchBar(props) {
 
   const handleKeyUp = (e) => {
     if (e.keyCode === 13) {
-      if (searchText.length === 0) store.loadIdNamePairs();
-      else store.search(searchText);
+      store.search(searchText);
     }
+  };
+  const open = Boolean(anchorEl);
+  const handleClick = (event) => {
+    setAnchorEl(event.currentTarget);
+  };
+  const handleClose = () => {
+    setAnchorEl(null);
+  };
+
+  const handleSortByName = () => {
+    // call some store method
+    store.sortByName();
+    handleClose();
+  };
+
+  const handleSortByLikes = () => {
+    store.sortByLikes();
+    handleClose();
+  };
+
+  const handleSortByDislikes = () => {
+    store.sortByDislikes();
+    handleClose();
+  };
+
+  const handleSortByListens = () => {
+    store.sortByListens();
+    handleClose();
+  };
+
+  const handleSortByPublishDate = () => {
+    handleClose();
   };
 
   useEffect(() => {
@@ -91,9 +122,32 @@ function SearchBar(props) {
       <Typography variant="button" sx={{ marginLeft: "auto" }}>
         SORT BY
       </Typography>
-      <IconButton>
+      <IconButton
+        aria-controls={open ? "basic-menu" : undefined}
+        aria-haspopup="true"
+        aria-expanded={open ? "true" : undefined}
+        onClick={handleClick}
+      >
         <SortOutlinedIcon fontSize="large" />
       </IconButton>
+
+      <Menu
+        id="basic-menu"
+        anchorEl={anchorEl}
+        open={open}
+        onClose={handleClose}
+        MenuListProps={{
+          "aria-labelledby": "basic-button",
+        }}
+      >
+        <MenuItem onClick={handleSortByName}>Name(A-Z)</MenuItem>
+        <MenuItem onClick={handleSortByPublishDate}>
+          Publish Date (Newest)
+        </MenuItem>
+        <MenuItem onClick={handleSortByListens}>Listens (High-Low)</MenuItem>
+        <MenuItem onClick={handleSortByLikes}>Likes (High-Low)</MenuItem>
+        <MenuItem onClick={handleSortByDislikes}>Dislikes (High-Low)</MenuItem>
+      </Menu>
     </div>
   );
 }

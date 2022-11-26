@@ -138,12 +138,42 @@ updatePlaylist = async (req, res) => {
     });
   }
 
-  const { name, songs } = body;
+  let { name, songs } = body;
+
+  // verify the name is not a duplicate
+
+  // grab the user
+  const user = await User.findById(req.userId);
+
+  if (!user) return res.status(404).json({ success: false, errorMessage: "" });
+
+  // make sure user doesn't have a playlist with the same name
+  const userOwnedPlaylists = user.playlists;
+
+  const duplicate = userOwnedPlaylists.find(
+    (playlist) => playlist.name === name
+  );
+
+  // if they do increase the counter of the original by one and create new list with name + counter
+  if (
+    duplicate &&
+    JSON.stringify(duplicate._id) !== JSON.stringify(req.playlist._id)
+  ) {
+    user.count += 1;
+    name = `${name} (${user.count})`;
+  }
+
+  let listRecordInUser = userOwnedPlaylists.find(
+    (playlist) =>
+      JSON.stringify(playlist._id) == JSON.stringify(req.playlist._id)
+  );
+
+  listRecordInUser.name = name;
+
+  await user.save();
 
   req.playlist.name = name;
   req.playlist.songs = songs;
-
-  console.log(body);
 
   if (req.body.isPublished) {
     req.playlist.isPublished = { status: true, date: Date.now() };

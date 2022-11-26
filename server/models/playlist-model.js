@@ -41,6 +41,17 @@ const playlistSchema = new Schema(
       default: [],
     },
 
+    likes: {
+      type: [
+        {
+          likeStatus: Number,
+          userId: { type: ObjectId, ref: "User" },
+        },
+      ],
+      required: true,
+      default: [],
+    },
+
     likeCount: { type: Number, required: true, default: 0 },
 
     dislikeCount: { type: Number, required: true, default: 0 },
@@ -49,7 +60,7 @@ const playlistSchema = new Schema(
 
     isPublished: {
       status: { type: Boolean, default: false },
-      date: { type: Date, default: "" },
+      date: { type: Date, default: null },
     },
   },
   { timestamps: true }

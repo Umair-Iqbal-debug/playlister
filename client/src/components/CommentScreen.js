@@ -1,23 +1,13 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
 import CommentCard from "./CommentCard";
 import { Box, TextField } from "@mui/material";
+import GlobalStoreContext from "../store";
+import AuthContext from "../auth";
 
 function CommentScreen() {
   const [text, setText] = useState("");
-  const [comments, setComments] = useState([
-    {
-      username: "GilmourAndMore",
-      text: "Dogs is the Best Pink Floyd song and you are an idiot if you think otherwise",
-    },
-    {
-      username: "GilmourAndMore",
-      text: "Dogs is the Best Pink Floyd song and you are an idiot if you think otherwise",
-    },
-  ]);
-
-  const addComment = (text) => {
-    setComments((prev) => [...prev, { username: "UmairIqbal", text: text }]);
-  };
+  const { store } = useContext(GlobalStoreContext);
+  const { auth } = useContext(AuthContext);
 
   const onChange = (event) => {
     setText(event.target.value);
@@ -25,7 +15,7 @@ function CommentScreen() {
 
   const keyDownHandler = (event) => {
     if (event.key === "Enter") {
-      addComment(event.target.value);
+      if (store.currentList) store.postComment(store.currentList._id, text);
       setText("");
     }
   };
@@ -37,6 +27,16 @@ function CommentScreen() {
     gap: "1rem",
     minHeight: "575px",
   };
+
+  let commentCards = "";
+
+  if (store.currentList) {
+    commentCards = store.currentList.comments.map((comment) => (
+      <CommentCard
+        comment={{ text: comment.text, username: comment.username }}
+      />
+    ));
+  }
 
   return (
     <Box sx={style}>
@@ -56,13 +56,16 @@ function CommentScreen() {
           bottom: "1.5em",
         }}
       >
-        {comments.map((comment) => (
-          <CommentCard comment={comment} />
-        ))}
+        {commentCards}
       </Box>
       <TextField
         onKeyDown={keyDownHandler}
         value={text}
+        disabled={
+          !auth.loggedIn ||
+          !store.currentList ||
+          !store.currentList.isPublished.status
+        }
         onChange={onChange}
         id="outlined-basic"
         label="Add Comment"

@@ -17,7 +17,8 @@ getPublishedPlaylists = async (req, res) => {
     queryObj["user.username"] = { $regex: req.query.username, $options: "i" };
 
   // need to add firstName and lastName into fields
-  const fields = "isPublished likeCount dislikeCount listens _id name user";
+  const fields =
+    "isPublished likeCount dislikeCount listens _id name user likes";
   const publishedPlaylists = await Playlist.find(queryObj, fields);
 
   return res.status(200).json({ success: true, playlists: publishedPlaylists });
@@ -44,63 +45,42 @@ postComment = async (req, res) => {
 // dislike: Boolean,
 // userId: { type: ObjectId, ref: "User" },
 
-postLike = async (req, res) => {
-  // has the person liked or disliked before ?
-  const user = await User.findById(req.userId);
+postLikeStatus = async (req, res) => {
+  //request body format = {likeStatus:-1,0,1,playlistId}
 
-  const likeStatus = user.likes.find(
-    (likeObj) => likeObj.playlistId == req.playlist._id
+  const playlist = req.playlist;
+
+  const likeStatusObj = playlist.likes.find(
+    (likeObj) => JSON.stringify(likeObj.userId) == JSON.stringify(req.userId)
   );
 
-  // has already liked then don't do anything
-  if (likeStatus) {
-    if (likeStatus.like)
-      return res.status(200).json({ success: true, playlist: req.playlist });
-    likeStatus.like = true;
-    likeStatus.dislike = false;
-    // has disliked then subtract total dislikes
-    req.playlist.dislikeCount -= 1;
+  let newLikeStatus = req.body.likeStatus;
+  // has an exisisting record
+  if (likeStatusObj) {
+    const oldLikeStatus = likeStatusObj.likeStatus;
+    if (oldLikeStatus !== newLikeStatus) {
+      likeStatusObj.likeStatus = newLikeStatus;
+
+      // disliked earlier
+      if (oldLikeStatus === -1) {
+        req.playlist.dislikeCount -= 1;
+        if (newLikeStatus === 1) playlist.likeCount += 1;
+      } else if (oldLikeStatus === 1) {
+        req.playlist.likeCount -= 1;
+        if (newLikeStatus === -1) playlist.dislikeCount += 1;
+      } else if (oldLikeStatus === 0) {
+        if (newLikeStatus === -1) playlist.dislikeCount += 1;
+        if (newLikeStatus === 1) playlist.likeCount += 1;
+      }
+    }
   } else {
-    user.likes = [
-      ...user.likes,
-      { like: true, dislike: false, playlistId: req.playlist.Id },
-    ];
+    if (newLikeStatus === -1) playlist.dislikeCount += 1;
+    if (newLikeStatus === 1) playlist.likeCount += 1;
+    playlist.likes.push({
+      likeStatus: newLikeStatus,
+      userId: req.userId,
+    });
   }
-
-  // increment likeCount
-  req.playlist.likeCount += 1;
-
-  //update playlist in db
-  const updatedPlaylist = await req.playlist.save();
-
-  //send response
-  res.status(200).json({ sucess: true, playlist: updatedPlaylist });
-};
-
-postDislike = async (req, res) => {
-  //TODO FIX LIKE AND DISLIKE CONTROLLER METHODS
-  // has the person liked or disliked before ?
-  const likeStatus = req.playlist.likes.find(
-    (likeObj) => likeObj.userId == req.userId
-  );
-
-  // has already liked then don't do anything
-  if (likeStatus) {
-    if (likeStatus.dislike)
-      return res.status(200).json({ success: true, playlist: req.playlist });
-    likeStatus.dislike = true;
-    likeStatus.like = false;
-    // has disliked then subtract total dislikes
-    req.playlist.likeCount -= 1;
-  } else {
-    req.playlist.likes = [
-      ...req.playlist.likes,
-      { like: false, dislike: true, userId: req.userId },
-    ];
-  }
-
-  // increment likeCount
-  req.playlist.dislikeCount += 1;
 
   //update playlist in db
   const updatedPlaylist = await req.playlist.save();
@@ -116,7 +96,6 @@ getPublishedPlaylistById = (req, res) => {
 module.exports = {
   getPublishedPlaylists,
   postComment,
-  postLike,
-  postDislike,
+  postLikeStatus,
   getPublishedPlaylistById,
 };

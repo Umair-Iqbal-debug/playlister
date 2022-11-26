@@ -12,36 +12,49 @@ import GlobalStoreContext from "../store";
 import SongCard from "./SongCard";
 import WorkspaceScreen from "./WorkspaceScreen";
 import Toolbar from "./Toolbar";
+import AuthContext from "../auth";
 
 export default function PublishedPlaylistCard({ playlist }) {
-  const [likeStatus, setLikeStatus] = React.useState(0);
-
-  const { name, likeCount, dislikeCount, listens, _id } = playlist;
-
+  const { name, likeCount, dislikeCount, listens, _id, likes } = playlist;
   const { store } = React.useContext(GlobalStoreContext);
+  const { auth } = React.useContext(AuthContext);
+
+  React.useEffect(() => {
+    let defaultLikeStatus = 0;
+    if (auth.loggedIn) {
+      let exisistingRecord = likes.find(
+        (likeObj) =>
+          JSON.stringify(likeObj.userId) === JSON.stringify(auth.user._id)
+      );
+      if (exisistingRecord) defaultLikeStatus = exisistingRecord.likeStatus;
+      setLikeStatus(defaultLikeStatus);
+    }
+  });
+
+  const [likeStatus, setLikeStatus] = React.useState(0);
 
   let expanded = false;
 
   let color = "#d4d4f5";
-  if (store && store.currentList && store.currentList._id == _id) {
+  if (
+    store &&
+    store.currentList &&
+    JSON.stringify(store.currentList._id) === JSON.stringify(_id)
+  ) {
     color = "#d4af37";
     expanded = true;
   }
 
   const handleLikeBtn = (e) => {
     e.stopPropagation();
-    setLikeStatus((prevStatus) => {
-      if (prevStatus === 1) return 0;
-      return 1;
-    });
+    if (likeStatus === 1) store.postLikeStatus(_id, 0);
+    else store.postLikeStatus(_id, 1);
   };
 
   const handleDislike = (e) => {
     e.stopPropagation();
-    setLikeStatus((prevStatus) => {
-      if (prevStatus === -1) return 0;
-      return -1;
-    });
+    if (likeStatus === -1) store.postLikeStatus(_id, 0);
+    else store.postLikeStatus(_id, -1);
   };
 
   const handLoadList = (e) => {
@@ -52,7 +65,28 @@ export default function PublishedPlaylistCard({ playlist }) {
     }
   };
 
-  const formateDate = (date) => date;
+  const formateDate = (date) => {
+    const MONTHS = [
+      "Jan",
+      "Feb",
+      "Mar",
+      "April",
+      "May",
+      "Jun",
+      "Jul",
+      "Aug",
+      "Sep",
+      "Oct",
+      "Nov",
+      "Dec",
+    ];
+    const tokens = date.split("-");
+    let years = tokens[0];
+    let month = MONTHS[Number(tokens[1]) - 1];
+    let day = tokens[2].substring(0, 2);
+
+    return `${month} ${day}, ${years}`;
+  };
 
   const details = (
     <div style={{ display: "relative", marginTop: "auto" }}>

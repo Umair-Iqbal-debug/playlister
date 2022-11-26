@@ -15,7 +15,7 @@ function WorkspaceScreen({ playlist }) {
 
   return (
     <Box sx={{ overflow: "scroll", maxHeight: "400px" }}>
-      <List sx={{ overflow: "scroll", height: "400px" }}>
+      <List sx={{ overflow: "scroll", height: "300px", marginBottom: "1em" }}>
         {store.currentList &&
           store.currentList._id === playlist._id &&
           store.currentList.songs.map((song, idx) => {

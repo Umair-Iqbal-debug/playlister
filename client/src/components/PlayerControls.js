@@ -1,11 +1,12 @@
 import React from "react";
 import { Box, Button, Card, IconButton } from "@mui/material";
 import PlayArrowRoundIcon from "@mui/icons-material/PlayArrowRounded";
-import FastForwardRoundIcon from "@mui/icons-material/FastForwardRounded";
 import FastRewindRoundIcon from "@mui/icons-material/FastRewindRounded";
 import StopRoundIcon from "@mui/icons-material/Stop";
 import ShuffleRoundedIcon from "@mui/icons-material/ShuffleRounded";
 import ShuffleOnRoundedIcon from "@mui/icons-material/ShuffleOnRounded";
+import SkipNextIcon from "@mui/icons-material/SkipNext";
+import SkipPreviousIcon from "@mui/icons-material/SkipPrevious";
 
 function PlayerControls({
   player,
@@ -50,7 +51,7 @@ function PlayerControls({
   return (
     <Card elevation={3} sx={containerStyle}>
       <IconButton onClick={handlePrev} size="large">
-        <FastRewindRoundIcon style={style} />
+        <SkipPreviousIcon style={style} />
       </IconButton>
       <Button variant="text" onClick={handlePause}>
         <StopRoundIcon style={style} />
@@ -59,7 +60,7 @@ function PlayerControls({
         <PlayArrowRoundIcon style={style} />
       </Button>
       <Button variant="text" onClick={handleNext}>
-        <FastForwardRoundIcon style={style} />
+        <SkipNextIcon style={style} />
       </Button>
 
       {shuffleBtn}

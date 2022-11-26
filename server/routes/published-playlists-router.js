@@ -26,7 +26,6 @@ router.get(
   PlaylistController.getPublishedPlaylistById
 );
 router.post("/comments/:id", PlaylistController.postComment);
-router.post("/like/:id", PlaylistController.postLike);
-router.post("/dislike/:id", PlaylistController.postDislike);
+router.post("/like/:id", PlaylistController.postLikeStatus);
 
 module.exports = router;

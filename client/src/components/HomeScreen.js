@@ -58,7 +58,7 @@ function HomeScreen(props) {
           {store.searchMode === SearchMode.HOME ? addButton : ""}
 
           <Typography sx={{ display: "inline" }} variant="h4">
-            Lists
+            {store.searchText || ""} Lists
           </Typography>
           {modalJSX}
         </div>
