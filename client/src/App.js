@@ -7,6 +7,7 @@ import HomeScreen from "./components/HomeScreen";
 import AppBanner from "./components/AppBanner";
 import LoginScreen from "./components/LoginScreen";
 import RegisterScreen from "./components/RegisterScreen";
+import SplashScreen from "./components/SplashScreen";
 /*
     This is our application's top-level component.
     
@@ -28,6 +29,7 @@ const App = () => {
             <Route path="/" element={<HomeScreen />} />
             <Route path="/login/" element={<LoginScreen />} />
             <Route path="/register/" element={<RegisterScreen />} />
+            <Route path="/splashScreen/" element={<SplashScreen />} />
           </Routes>
         </GlobalStoreContextProvider>
       </AuthContextProvider>

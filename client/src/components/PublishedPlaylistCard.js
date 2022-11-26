@@ -141,7 +141,7 @@ export default function PublishedPlaylistCard({ playlist }) {
               }}
             >
               <div>
-                <IconButton onClick={handleLikeBtn}>
+                <IconButton disabled={!auth.loggedIn} onClick={handleLikeBtn}>
                   {likeStatus === 1 ? (
                     <ThumbUpAltIcon />
                   ) : (
@@ -149,7 +149,7 @@ export default function PublishedPlaylistCard({ playlist }) {
                   )}
                 </IconButton>
                 <Typography sx={{ display: "inline" }}>{likeCount}</Typography>
-                <IconButton onClick={handleDislike}>
+                <IconButton disabled={!auth.loggedIn} onClick={handleDislike}>
                   {likeStatus === -1 ? (
                     <ThumbDownAltIcon />
                   ) : (
