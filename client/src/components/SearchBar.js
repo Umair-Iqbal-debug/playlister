@@ -64,6 +64,17 @@ function SearchBar(props) {
   };
 
   const handleSortByPublishDate = () => {
+    store.sortByPublishDate();
+    handleClose();
+  };
+
+  const handleSortByCreationDate = () => {
+    store.sortByCreationDate();
+    handleClose();
+  };
+
+  const handleSortByLastEditDate = () => {
+    store.sortByLastEditDate();
     handleClose();
   };
 
@@ -72,12 +83,54 @@ function SearchBar(props) {
     else setSearchMode("ALL_LISTS");
   }, [auth.loggedIn]);
 
+  let menu = (
+    <Menu
+      id="basic-menu"
+      anchorEl={anchorEl}
+      open={open}
+      onClose={handleClose}
+      MenuListProps={{
+        "aria-labelledby": "basic-button",
+      }}
+    >
+      <MenuItem onClick={handleSortByCreationDate}>
+        Creation Date(Old-New)
+      </MenuItem>
+      <MenuItem onClick={handleSortByCreationDate}>
+        By Last Edit Date(New-Old)
+      </MenuItem>
+      <MenuItem onClick={handleSortByName}>Name(A-Z)</MenuItem>
+    </Menu>
+  );
+
+  if (store.searchMode !== "HOME") {
+    menu = (
+      <Menu
+        id="basic-menu"
+        anchorEl={anchorEl}
+        open={open}
+        onClose={handleClose}
+        MenuListProps={{
+          "aria-labelledby": "basic-button",
+        }}
+      >
+        <MenuItem onClick={handleSortByName}>Name(A-Z)</MenuItem>
+        <MenuItem onClick={handleSortByPublishDate}>
+          Publish Date (Newest)
+        </MenuItem>
+        <MenuItem onClick={handleSortByListens}>Listens (High-Low)</MenuItem>
+        <MenuItem onClick={handleSortByLikes}>Likes (High-Low)</MenuItem>
+        <MenuItem onClick={handleSortByDislikes}>Dislikes (High-Low)</MenuItem>
+      </Menu>
+    );
+  }
+
   return (
     <div
       style={{
         display: "flex",
         alignItems: "center",
-        justifyContent: "center",
+        justifyContent: "space-between",
       }}
     >
       {auth.loggedIn && (
@@ -131,23 +184,7 @@ function SearchBar(props) {
         <SortOutlinedIcon fontSize="large" />
       </IconButton>
 
-      <Menu
-        id="basic-menu"
-        anchorEl={anchorEl}
-        open={open}
-        onClose={handleClose}
-        MenuListProps={{
-          "aria-labelledby": "basic-button",
-        }}
-      >
-        <MenuItem onClick={handleSortByName}>Name(A-Z)</MenuItem>
-        <MenuItem onClick={handleSortByPublishDate}>
-          Publish Date (Newest)
-        </MenuItem>
-        <MenuItem onClick={handleSortByListens}>Listens (High-Low)</MenuItem>
-        <MenuItem onClick={handleSortByLikes}>Likes (High-Low)</MenuItem>
-        <MenuItem onClick={handleSortByDislikes}>Dislikes (High-Low)</MenuItem>
-      </Menu>
+      {menu}
     </div>
   );
 }

@@ -1,6 +1,14 @@
 const Playlist = require("../models/playlist-model");
 const User = require("../models/user-model");
 
+const SortMode = {
+  LISTENS: "LISTENS",
+  LIKES: "LIKES",
+  DISLIKES: "DISLIKES",
+  PUBLISH_DATE: "PUBLISH_DATE",
+  NAME: "NAME",
+};
+
 //router.get("/", PlaylistController.getPublishedPlaylists);
 // router.post("/comments/:id", PlaylistController.postComment);
 // router.post("/like/:id", PlaylistController.postLike);
@@ -16,10 +24,27 @@ getPublishedPlaylists = async (req, res) => {
   if (req.query.username)
     queryObj["user.username"] = { $regex: req.query.username, $options: "i" };
 
+  let defaultSearch = "name";
+  if (req.query.searchParam) {
+    searchParam = req.query.searchParam;
+    if (searchParam === SortMode.LIKES) searchParam = "-likeCount";
+    if (searchParam === SortMode.DISLIKES) searchParam = "-dislikeCount";
+    if (searchParam === SortMode.LISTENS) searchParam = "-listens";
+    if (searchParam === SortMode.PUBLISH_DATE)
+      searchParam = "-isPublished.date";
+
+    defaultSearch = searchParam;
+    console.log("HERE", req.query.searchParam);
+  }
+
+  console.log(defaultSearch);
+
   // need to add firstName and lastName into fields
   const fields =
     "isPublished likeCount dislikeCount listens _id name user likes";
-  const publishedPlaylists = await Playlist.find(queryObj, fields);
+  const publishedPlaylists = await Playlist.find(queryObj, fields).sort(
+    defaultSearch
+  );
 
   return res.status(200).json({ success: true, playlists: publishedPlaylists });
 };
@@ -89,8 +114,11 @@ postLikeStatus = async (req, res) => {
   res.status(200).json({ sucess: true, playlist: updatedPlaylist });
 };
 
-getPublishedPlaylistById = (req, res) => {
-  return res.status(200).json({ sucess: true, playlist: req.playlist });
+getPublishedPlaylistById = async (req, res) => {
+  req.playlist.listens += 1;
+  let updatedPlaylist = await req.playlist.save();
+  console.log(updatedPlaylist);
+  return res.status(200).json({ sucess: true, playlist: updatedPlaylist });
 };
 
 module.exports = {

@@ -7,6 +7,8 @@ import MoveSong_Transaction from "../transactions/MoveSong_Transaction";
 import RemoveSong_Transaction from "../transactions/RemoveSong_Transaction";
 import UpdateSong_Transaction from "../transactions/UpdateSong_Transaction";
 import AuthContext from "../auth";
+import { Sort } from "@mui/icons-material";
+import { Global } from "@emotion/react";
 
 /*
     This is our global data store. Note that it uses the Flux design pattern,
@@ -37,6 +39,8 @@ export const GlobalStoreActionType = {
   SET_CURRENT_IDX: "SET_CURRENT_IDX",
   SEARCH: "SEARCH",
   DUPLICATE: "DUPLICATE",
+  OPEN_PUBLISHED_PLAYLIST: "OPEN_PUBLISHED_PLAYLIST",
+  SET_SORT_MODE: "SET_SORT_MODE",
 };
 
 // WE'LL NEED THIS TO PROCESS TRANSACTIONS
@@ -56,6 +60,16 @@ export const SearchMode = {
   USERS: "USERS",
 };
 
+export const SortMode = {
+  LISTENS: "LISTENS",
+  LIKES: "LIKES",
+  DISLIKES: "DISLIKES",
+  PUBLISH_DATE: "PUBLISH_DATE",
+  NAME: "NAME",
+  CREATION_DATE: "CREATION_DATE",
+  LAST_EDIT_DATE: "LAST_EDIT_DATE",
+};
+
 // WITH THIS WE'RE MAKING OUR GLOBAL DATA STORE
 // AVAILABLE TO THE REST OF THE APPLICATION
 function GlobalStoreContextProvider(props) {
@@ -72,10 +86,11 @@ function GlobalStoreContextProvider(props) {
     listMarkedForDeletion: null,
     searchMode: SearchMode.HOME,
     searchText: "",
+    errorMessage: null,
+    listIdMarkedForEdit: null,
+    sortMode: SortMode.NAME,
   });
   const history = useNavigate();
-
-  console.log("inside useGlobalStore");
 
   // SINCE WE'VE WRAPPED THE STORE IN THE AUTH CONTEXT WE CAN ACCESS THE USER HERE
   const { auth } = useContext(AuthContext);
@@ -100,6 +115,8 @@ function GlobalStoreContextProvider(props) {
           listMarkedForDeletion: null,
           searchMode: payload,
           searchText: store.searchText,
+          listIdMarkedForEdit: null,
+          sortMode: store.sortMode,
         });
       }
       // LIST UPDATE OF ITS NAME
@@ -117,6 +134,8 @@ function GlobalStoreContextProvider(props) {
           listMarkedForDeletion: null,
           searchMode: store.searchMode,
           searchText: store.searchText,
+          listIdMarkedForEdit: null,
+          sortMode: store.sortMode,
         });
       }
       // STOP EDITING THE CURRENT LIST
@@ -134,6 +153,8 @@ function GlobalStoreContextProvider(props) {
           listMarkedForDeletion: null,
           searchMode: store.searchMode,
           searchText: store.searchText,
+          listIdMarkedForEdit: null,
+          sortMode: store.sortMode,
         });
       }
       // CREATE A NEW LIST
@@ -151,6 +172,8 @@ function GlobalStoreContextProvider(props) {
           listMarkedForDeletion: null,
           searchMode: store.searchMode,
           searchText: store.searchText,
+          listIdMarkedForEdit: null,
+          sortMode: store.sortMode,
         });
       }
       // GET ALL THE LISTS SO WE CAN PRESENT THEM
@@ -168,6 +191,8 @@ function GlobalStoreContextProvider(props) {
           listMarkedForDeletion: null,
           searchMode: store.searchMode,
           searchText: store.searchText,
+          listIdMarkedForEdit: null,
+          sortMode: store.sortMode,
         });
       }
       // PREPARE TO DELETE A LIST
@@ -185,6 +210,8 @@ function GlobalStoreContextProvider(props) {
           listMarkedForDeletion: payload.playlist,
           searchMode: store.searchMode,
           searchText: store.searchText,
+          listIdMarkedForEdit: null,
+          sortMode: store.sortMode,
         });
       }
       // UPDATE A LIST
@@ -194,7 +221,7 @@ function GlobalStoreContextProvider(props) {
           errorMessage: null,
           idNamePairs: store.idNamePairs,
           currentList: payload,
-          currentSongIndex: -1,
+          currentSongIndex: payload && payload.songs.length > 0 ? 0 : -1,
           currentSong: null,
           newListCounter: store.newListCounter,
           listNameActive: false,
@@ -202,6 +229,8 @@ function GlobalStoreContextProvider(props) {
           listMarkedForDeletion: null,
           searchMode: store.searchMode,
           searchText: store.searchText,
+          listIdMarkedForEdit: null,
+          sortMode: store.sortMode,
         });
       }
       // START EDITING A LIST NAME
@@ -219,6 +248,8 @@ function GlobalStoreContextProvider(props) {
           listMarkedForDeletion: null,
           searchMode: store.searchMode,
           searchText: store.searchText,
+          listIdMarkedForEdit: null,
+          sortMode: store.sortMode,
         });
       }
       //
@@ -236,6 +267,8 @@ function GlobalStoreContextProvider(props) {
           listMarkedForDeletion: null,
           searchMode: store.searchMode,
           searchText: store.searchText,
+          listIdMarkedForEdit: null,
+          sortMode: store.sortMode,
         });
       }
       case GlobalStoreActionType.REMOVE_SONG: {
@@ -252,6 +285,8 @@ function GlobalStoreContextProvider(props) {
           listMarkedForDeletion: null,
           searchMode: store.searchMode,
           searchText: store.searchText,
+          listIdMarkedForEdit: null,
+          sortMode: store.sortMode,
         });
       }
       case GlobalStoreActionType.HIDE_MODALS: {
@@ -268,22 +303,26 @@ function GlobalStoreContextProvider(props) {
           listMarkedForDeletion: null,
           searchMode: store.searchMode,
           searchText: store.searchText,
+          listIdMarkedForEdit: null,
+          sortMode: store.sortMode,
         });
       }
       case GlobalStoreActionType.ERROR_MODAL: {
         return setStore({
           currentModal: CurrentModal.ERROR_MODAL,
-          errorMessage: payload.messsage,
+          errorMessage: payload.message,
           idNamePairs: store.idNamePairs,
           currentList: store.currentList,
           currentSongIndex: -1,
           currentSong: null,
           newListCounter: store.newListCounter,
-          listNameActive: false,
+          listNameActive: store.listNameActive,
           listIdMarkedForDeletion: null,
           listMarkedForDeletion: null,
           searchMode: store.searchMode,
           searchText: store.searchText,
+          listIdMarkedForEdit: null,
+          sortMode: store.sortMode,
         });
       }
 
@@ -301,6 +340,8 @@ function GlobalStoreContextProvider(props) {
           listMarkedForDeletion: null,
           searchMode: store.searchMode,
           searchText: store.searchText,
+          listIdMarkedForEdit: null,
+          sortMode: store.sortMode,
         });
       }
       case GlobalStoreActionType.SEARCH: {
@@ -317,6 +358,30 @@ function GlobalStoreContextProvider(props) {
           listMarkedForDeletion: null,
           searchMode: store.searchMode,
           searchText: payload.searchText,
+          listIdMarkedForEdit: null,
+          sortMode: store.sortMode,
+        });
+      }
+
+      case GlobalStoreActionType.OPEN_PUBLISHED_PLAYLIST: {
+        return setStore({
+          currentModal: CurrentModal.NONE,
+          errorMessage: null,
+          idNamePairs: payload.playlists,
+          currentList: payload.currentList,
+          currentSongIndex:
+            payload.currentList && payload.currentList.songs.length > 0
+              ? 0
+              : -1,
+          currentSong: null,
+          newListCounter: store.newListCounter,
+          listNameActive: false,
+          listIdMarkedForDeletion: null,
+          listMarkedForDeletion: null,
+          searchMode: store.searchMode,
+          searchText: payload.searchText,
+          listIdMarkedForEdit: null,
+          sortMode: store.sortMode,
         });
       }
 
@@ -334,6 +399,27 @@ function GlobalStoreContextProvider(props) {
           listMarkedForDeletion: null,
           searchMode: SearchMode.HOME,
           searchText: payload.searchText,
+          listIdMarkedForEdit: null,
+          sortMode: store.sortMode,
+        });
+      }
+
+      case GlobalStoreActionType.SET_SORT_MODE: {
+        return setStore({
+          currentModal: CurrentModal.NONE,
+          errorMessage: null,
+          idNamePairs: store.idNamePairs,
+          currentList: store.currentList,
+          currentSongIndex: store.currentSongIndex,
+          currentSong: null,
+          newListCounter: store.newListCounter,
+          listNameActive: false,
+          listIdMarkedForDeletion: null,
+          listMarkedForDeletion: null,
+          searchMode: store.searchMode,
+          searchText: store.searchText,
+          listIdMarkedForEdit: null,
+          sortMode: payload,
         });
       }
 
@@ -355,22 +441,11 @@ function GlobalStoreContextProvider(props) {
         let playlist = response.data.playlist;
         playlist.name = newName;
         async function updateList(playlist) {
-          response = await api.updatePlaylistById(playlist._id, playlist);
-          if (response.data.success) {
-            async function getListPairs(playlist) {
-              response = await api.getPlaylistPairs();
-              if (response.data.success) {
-                let pairsArray = response.data.playlists;
-                storeReducer({
-                  type: GlobalStoreActionType.CHANGE_LIST_NAME,
-                  payload: {
-                    idNamePairs: pairsArray,
-                    playlist: playlist,
-                  },
-                });
-              }
-            }
-            getListPairs(playlist);
+          try {
+            response = await api.updatePlaylistById(playlist._id, playlist);
+            store.search();
+          } catch ({ response }) {
+            store.showErrorModal(response.data.errorMessage);
           }
         }
         updateList(playlist);
@@ -387,7 +462,7 @@ function GlobalStoreContextProvider(props) {
     });
     tps.clearAllTransactions();
     // go back to the HomeWrapper which should take us to the homescreen
-    history("/");
+    // history("/");
   };
 
   // THIS FUNCTION CREATES A NEW LIST
@@ -492,8 +567,9 @@ function GlobalStoreContextProvider(props) {
   store.deleteList = function (id) {
     async function processDelete(id) {
       let response = await api.deletePlaylistById(id);
-      store.search(store.searchText);
-      history("/");
+      if (store.searchMode === SearchMode.HOME) store.loadIdNamePairs();
+      else store.search(store.searchText);
+      // history("/");
     }
     processDelete(id);
   };
@@ -527,7 +603,7 @@ function GlobalStoreContextProvider(props) {
   store.showErrorModal = (errorMessage) => {
     storeReducer({
       type: GlobalStoreActionType.ERROR_MODAL,
-      message: errorMessage,
+      payload: { message: errorMessage },
     });
   };
 
@@ -555,6 +631,7 @@ function GlobalStoreContextProvider(props) {
   // OF A LIST, WHICH INCLUDES DEALING WITH THE TRANSACTION STACK. THE
   // FUNCTIONS ARE setCurrentList, addMoveItemTransaction, addUpdateItemTransaction,
   // moveItem, updateItem, updateCurrentList, undo, and redo
+
   store.setCurrentList = function (id) {
     async function asyncSetCurrentList(id) {
       try {
@@ -572,16 +649,80 @@ function GlobalStoreContextProvider(props) {
     asyncSetCurrentList(id);
   };
 
+  // store.setCurrentListPublished = function (id) {
+  //   async function asyncSetCurrentList(id) {
+  //     try {
+  //       let response = await api.getPublishedPlaylistsById(id);
+  //       let playlist = response.data.playlist;
+  //       tps.clearAllTransactions();
+  //       storeReducer({
+  //         type: GlobalStoreActionType.SET_CURRENT_LIST,
+  //         payload: playlist,
+  //       });
+  //     } catch (err) {
+  //       console.log(err);
+  //     }
+  //   }
+  //   asyncSetCurrentList(id);
+  // };
+
   store.setCurrentListPublished = function (id) {
     async function asyncSetCurrentList(id) {
       try {
         let response = await api.getPublishedPlaylistsById(id);
         let playlist = response.data.playlist;
         tps.clearAllTransactions();
-        storeReducer({
-          type: GlobalStoreActionType.SET_CURRENT_LIST,
-          payload: playlist,
-        });
+
+        const asyncSearch = async (searchText) => {
+          const searchMode = store.searchMode;
+          if (searchMode === SearchMode.HOME) {
+            const response = await api.searchOwnedPlaylists(
+              searchText,
+              store.sortMode
+            );
+            const playlists = response.data.playlists;
+            storeReducer({
+              type: GlobalStoreActionType.OPEN_PUBLISHED_PLAYLIST,
+              payload: {
+                playlists: playlists,
+                searchText: searchText,
+                currentList: playlist,
+              },
+            });
+          } else if (searchMode === SearchMode.ALL_LISTS) {
+            const response = await api.searchPublishedPlaylists(
+              searchText,
+              null,
+              store.sortMode
+            );
+            const playlists = response.data.playlists;
+            storeReducer({
+              type: GlobalStoreActionType.OPEN_PUBLISHED_PLAYLIST,
+              payload: {
+                playlists: playlists,
+                searchText: searchText,
+                currentList: playlist,
+              },
+            });
+          } else if (searchMode === SearchMode.USERS) {
+            const response = await api.searchPublishedPlaylists(
+              undefined,
+              searchText,
+              store.sortMode
+            );
+            const playlists = response.data.playlists;
+            storeReducer({
+              type: GlobalStoreActionType.OPEN_PUBLISHED_PLAYLIST,
+              payload: {
+                playlists: playlists,
+                searchText: searchText,
+                currentList: playlist,
+              },
+            });
+          }
+        };
+
+        asyncSearch(store.searchText);
       } catch (err) {
         console.log(err);
       }
@@ -733,14 +874,21 @@ function GlobalStoreContextProvider(props) {
     const asyncSearch = async (searchText) => {
       const searchMode = store.searchMode;
       if (searchMode === SearchMode.HOME) {
-        const response = await api.searchOwnedPlaylists(searchText);
+        const response = await api.searchOwnedPlaylists(
+          searchText,
+          store.sortMode
+        );
         const playlists = response.data.playlists;
         storeReducer({
           type: GlobalStoreActionType.SEARCH,
           payload: { playlists: playlists, searchText: searchText },
         });
       } else if (searchMode === SearchMode.ALL_LISTS) {
-        const response = await api.searchPublishedPlaylists(searchText);
+        const response = await api.searchPublishedPlaylists(
+          searchText,
+          null,
+          store.sortMode
+        );
         const playlists = response.data.playlists;
         storeReducer({
           type: GlobalStoreActionType.SEARCH,
@@ -749,7 +897,8 @@ function GlobalStoreContextProvider(props) {
       } else if (searchMode === SearchMode.USERS) {
         const response = await api.searchPublishedPlaylists(
           undefined,
-          searchText
+          searchText,
+          store.sortMode
         );
         const playlists = response.data.playlists;
         storeReducer({
@@ -792,42 +941,51 @@ function GlobalStoreContextProvider(props) {
   };
 
   store.sortByName = () => {
-    let copy = [...store.idNamePairs];
-    copy.sort((a, b) => a.name.localeCompare(b.name));
-
     storeReducer({
-      type: GlobalStoreActionType.LOAD_ID_NAME_PAIRS,
-      payload: copy,
+      type: GlobalStoreActionType.SET_SORT_MODE,
+      payload: SortMode.NAME,
     });
   };
 
   store.sortByListens = () => {
-    let copy = [...store.idNamePairs];
-    copy.sort((a, b) => b.listens - a.listens);
-
     storeReducer({
-      type: GlobalStoreActionType.LOAD_ID_NAME_PAIRS,
-      payload: copy,
+      type: GlobalStoreActionType.SET_SORT_MODE,
+      payload: SortMode.LISTENS,
     });
   };
 
   store.sortByLikes = () => {
-    let copy = [...store.idNamePairs];
-    copy.sort((a, b) => b.likeCount - a.likeCount);
-
     storeReducer({
-      type: GlobalStoreActionType.LOAD_ID_NAME_PAIRS,
-      payload: copy,
+      type: GlobalStoreActionType.SET_SORT_MODE,
+      payload: SortMode.LIKES,
     });
   };
 
   store.sortByDislikes = () => {
-    let copy = [...store.idNamePairs];
-    copy.sort((a, b) => b.dislikeCount - a.dislikeCount);
-
     storeReducer({
-      type: GlobalStoreActionType.LOAD_ID_NAME_PAIRS,
-      payload: copy,
+      type: GlobalStoreActionType.SET_SORT_MODE,
+      payload: SortMode.DISLIKES,
+    });
+  };
+
+  store.sortByPublishDate = function () {
+    storeReducer({
+      type: GlobalStoreActionType.SET_SORT_MODE,
+      payload: SortMode.PUBLISH_DATE,
+    });
+  };
+
+  store.sortByCreationDate = function () {
+    storeReducer({
+      type: GlobalStoreActionType.SET_SORT_MODE,
+      payload: SortMode.CREATION_DATE,
+    });
+  };
+
+  store.sortByLastEditDate = function () {
+    storeReducer({
+      type: GlobalStoreActionType.SET_SORT_MODE,
+      payload: SortMode.LAST_EDIT_DATE,
     });
   };
   // THIS FUNCTION ENABLES THE PROCESS OF EDITING A LIST NAME
@@ -835,19 +993,6 @@ function GlobalStoreContextProvider(props) {
     storeReducer({
       type: GlobalStoreActionType.SET_LIST_NAME_EDIT_ACTIVE,
       payload: null,
-    });
-  };
-
-  store.sortByPublishDate = function () {
-    let copy = [...store.idNamePairs];
-    copy.sort(function (a, b) {
-      // Turn your strings into dates, and then subtract them
-      // to get a value that is either negative, positive, or zero.
-      return new Date(b.date) - new Date(a.date);
-    });
-    storeReducer({
-      type: GlobalStoreActionType.LOAD_ID_NAME_PAIRS,
-      payload: copy,
     });
   };
 

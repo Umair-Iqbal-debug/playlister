@@ -34,13 +34,18 @@ export const getPublishedPlaylistsById = (id) =>
   api.get(`/publishedPlaylists/${id}`);
 export const deletePlaylistById = (id) => api.delete(`/playlists/${id}`);
 export const getPlaylistById = (id) => api.get(`/playlists/${id}`);
-export const searchOwnedPlaylists = (name) =>
-  api.get(`/playlists?name=${name}`);
+export const searchOwnedPlaylists = (name, sortMode) => {
+  const opts = { name: name };
+  if (sortMode) opts.sortParam = sortMode;
 
-export const searchPublishedPlaylists = (name, username) => {
+  return api.get("/playlists", { params: opts });
+};
+
+export const searchPublishedPlaylists = (name, username, sortMode) => {
   const opts = {};
   if (name && name.length > 0) opts.name = name;
   if (username && username.length > 0) opts.username = username;
+  if (sortMode) opts.searchParam = sortMode;
 
   return api.get("/publishedPlaylists", { params: opts });
 };

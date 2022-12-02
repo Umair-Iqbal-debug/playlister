@@ -12,7 +12,7 @@ const UserSchema = new Schema(
     playlists: [
       {
         name: String,
-        _id: { type: ObjectId, ref: "Playlist" },
+        playlistId: { type: ObjectId, ref: "Playlist" },
       },
     ],
     count: { type: Number, default: 0 },

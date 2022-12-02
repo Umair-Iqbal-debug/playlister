@@ -33,6 +33,7 @@ function PlayerControls({
     borderRadius: "20px",
     borderColor: "black",
     paddingBottom: "1.1em",
+    marginBottom: "1em",
     // border: "1px solid black",
   };
 

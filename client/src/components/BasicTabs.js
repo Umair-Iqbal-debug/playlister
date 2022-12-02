@@ -61,6 +61,9 @@ export default function BasicTabs() {
           value={value}
           onChange={handleChange}
           aria-label="basic tabs example"
+          sx={{
+            "& button:focus": { backgroundColor: "#2c2f70", color: "white" },
+          }}
         >
           <Tab label="Player" {...a11yProps(0)} />
           <Tab label="Comments" {...a11yProps(1)} />

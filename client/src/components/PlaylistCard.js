@@ -1,21 +1,50 @@
-import React, { useContext, useState } from "react";
+import React, { useContext, useState, useRef, useEffect } from "react";
 import Accordion from "@mui/material/Accordion";
 import AccordionSummary from "@mui/material/AccordionSummary";
 import AccordionDetails from "@mui/material/AccordionDetails";
 import Typography from "@mui/material/Typography";
-import { Box, Button, TextField } from "@mui/material";
+import {
+  Box,
+  Button,
+  createTheme,
+  TextField,
+  ThemeProvider,
+} from "@mui/material";
 import GlobalStoreContext from "../store";
 import Add from "@mui/icons-material/Add";
 import WorkspaceScreen from "./WorkspaceScreen";
 import EditIcon from "@mui/icons-material/Edit";
-
 import Toolbar from "./Toolbar";
+import AuthContext from "../auth";
 
 export default function PlaylistCard({ playlist }) {
   const { store } = useContext(GlobalStoreContext);
 
   const [editActive, setEditActive] = useState(false);
   const [text, setText] = useState("");
+
+  const theme = createTheme({
+    palette: {
+      primary: {
+        main: "#2c2f70",
+      },
+    },
+  });
+
+  useEffect(() => {
+    // was this list open ?
+    if (editActive) {
+      // was edit successfull ? did user click on a different list
+      if (
+        !store.listNameActive ||
+        (store.currentList &&
+          JSON.stringify(store.currentList._id) !==
+            JSON.stringify(playlist._id))
+      ) {
+        setEditActive(false);
+      }
+    }
+  }, [store.listNameActive]);
 
   const { name, _id } = playlist;
 
@@ -30,9 +59,12 @@ export default function PlaylistCard({ playlist }) {
 
   function handleKeyPress(event) {
     if (event.code === "Enter") {
-      if (!text) return;
+      if (!text) {
+        toggleEdit();
+        return;
+      }
       store.changeListName(_id, text.trim());
-      toggleEdit();
+      //toggleEdit();
     }
   }
   function handleUpdateText(event) {
@@ -62,6 +94,7 @@ export default function PlaylistCard({ playlist }) {
 
   let card = (
     <div
+      id={`detail-${playlist._id}`}
       style={{
         position: "relative",
         display: "flex",
@@ -103,10 +136,11 @@ export default function PlaylistCard({ playlist }) {
   if (editActive) {
     card = (
       <TextField
+        id={`detail-${playlist._id}`}
         margin="normal"
         required
         fullWidth
-        id={"list-" + _id}
+        // id={"list-" + _id}
         label="Playlist Name"
         name="name"
         autoComplete="Playlist Name"
@@ -123,7 +157,11 @@ export default function PlaylistCard({ playlist }) {
   }
 
   return (
-    <div style={{ marginBottom: "0.5rem" }} onClick={handLoadList}>
+    <div
+      id={`detail-${playlist._id}`}
+      style={{ marginBottom: "0.5rem" }}
+      onClick={handLoadList}
+    >
       <Accordion
         expanded={expanded}
         sx={{
@@ -137,14 +175,12 @@ export default function PlaylistCard({ playlist }) {
         <AccordionDetails>
           <Box sx={{ display: "flex", flexDirection: "column" }}>
             <WorkspaceScreen playlist={playlist} />
-            <Button
-              onClick={handleAdd}
-              variant="contained"
-              sx={{ backgroundColor: "#2c2f70" }}
-            >
-              <Add fontSize="large" />
-            </Button>
-            <Toolbar />
+            <ThemeProvider theme={theme}>
+              <Button onClick={handleAdd} variant="contained">
+                <Add fontSize="large" />
+              </Button>
+              <Toolbar />
+            </ThemeProvider>
           </Box>
         </AccordionDetails>
       </Accordion>

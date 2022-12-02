@@ -51,11 +51,11 @@ export default function AppBanner() {
       open={isMenuOpen}
       onClose={handleMenuClose}
     >
-      <MenuItem onClick={handleMenuClose}>
-        <Link to="/login">Login</Link>
+      <MenuItem onClick={handleMenuClose} component={Link} to="/login">
+        Login
       </MenuItem>
-      <MenuItem onClick={handleMenuClose}>
-        <Link to="/register">Create New Account</Link>
+      <MenuItem onClick={handleMenuClose} component={Link} to="/register">
+        Create New Account
       </MenuItem>
     </Menu>
   );

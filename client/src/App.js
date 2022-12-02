@@ -8,6 +8,7 @@ import AppBanner from "./components/AppBanner";
 import LoginScreen from "./components/LoginScreen";
 import RegisterScreen from "./components/RegisterScreen";
 import SplashScreen from "./components/SplashScreen";
+import HomeWrapper from "./components/HomeWrapper";
 /*
     This is our application's top-level component.
     
@@ -26,7 +27,8 @@ const App = () => {
         <GlobalStoreContextProvider>
           <AppBanner />
           <Routes>
-            <Route path="/" element={<HomeScreen />} />
+            <Route path="/" element={<HomeWrapper />} />
+            <Route path="/homescreen" element={<HomeScreen />} />
             <Route path="/login/" element={<LoginScreen />} />
             <Route path="/register/" element={<RegisterScreen />} />
             <Route path="/splashScreen/" element={<SplashScreen />} />

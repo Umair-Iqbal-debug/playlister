@@ -8,6 +8,7 @@ import AddIcon from "@mui/icons-material/Add";
 import GlobalStoreContext, { SearchMode } from "../store";
 import MUIDeleteModal from "./MUIDeleteModal";
 import MUIRemoveSongModal from "./MUIRemoveSongModal";
+import ErrorModalHomeScreen from "./ErrorModalHomeScreen";
 import MUIEditSongModal from "./MUIEditSongModal";
 
 function HomeScreen(props) {
@@ -61,6 +62,7 @@ function HomeScreen(props) {
             {store.searchText || ""} Lists
           </Typography>
           {modalJSX}
+          <ErrorModalHomeScreen />
         </div>
       </div>
     </div>

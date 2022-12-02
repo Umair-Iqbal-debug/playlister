@@ -1,6 +1,16 @@
 const Playlist = require("../models/playlist-model");
 const User = require("../models/user-model");
 
+const SortMode = {
+  LISTENS: "LISTENS",
+  LIKES: "LIKES",
+  DISLIKES: "DISLIKES",
+  PUBLISH_DATE: "PUBLISH_DATE",
+  NAME: "NAME",
+  CREATION_DATE: "CREATION_DATE",
+  LAST_EDIT_DATE: "LAST_EDIT_DATE",
+};
+
 createPlaylist = async (req, res) => {
   const body = req.body;
   if (!body) {
@@ -51,7 +61,7 @@ createPlaylist = async (req, res) => {
 
   user.playlists = [
     ...userOwnedPlaylists,
-    { _id: savedPlaylist._id, name: savedPlaylist.name },
+    { playlistId: savedPlaylist._id, name: savedPlaylist.name },
   ];
 
   await user.save();
@@ -121,8 +131,22 @@ getPlaylistPairs = async (req, res) => {
 getPlaylists = async (req, res) => {
   const queryObj = { "user.userId": req.userId };
   if (req.query.name) queryObj.name = { $regex: req.query.name, $options: "i" };
+  let defaultSortParam = "createdAt";
 
-  const playlists = await Playlist.find(queryObj);
+  if (req.query.sortParam) {
+    let sortParam = req.query.sortParam;
+    if (sortParam === SortMode.CREATION_DATE) defaultSortParam = "createdAt";
+    if (sortParam === SortMode.LAST_EDIT_DATE) defaultSortParam = "-updatedAt";
+    if (sortParam === SortMode.NAME) defaultSortParam = "name";
+    if (sortParam === SortMode.LIKES) defaultSortParam = "-likeCount";
+    if (sortParam === SortMode.DISLIKES) defaultSortParam = "-dislikeCount";
+    if (sortParam === SortMode.LISTENS) defaultSortParam = "-listens";
+    if (sortParam === SortMode.PUBLISH_DATE)
+      defaultSortParam = "-isPublished.date";
+  }
+
+  const playlists = await Playlist.find(queryObj).sort(defaultSortParam);
+  console.log("HERE", defaultSortParam, queryObj);
   return res.status(200).json({ success: true, playlists: playlists });
 };
 
@@ -155,17 +179,21 @@ updatePlaylist = async (req, res) => {
   );
 
   // if they do increase the counter of the original by one and create new list with name + counter
+
+  console.log(req.playlist._id);
   if (
     duplicate &&
-    JSON.stringify(duplicate._id) !== JSON.stringify(req.playlist._id)
+    JSON.stringify(duplicate.playlistId) !== JSON.stringify(req.playlist._id)
   ) {
-    user.count += 1;
-    name = `${name} (${user.count})`;
+    return res.status(400).json({
+      success: false,
+      errorMessage: "You already have a playlist with that name!",
+    });
   }
 
   let listRecordInUser = userOwnedPlaylists.find(
     (playlist) =>
-      JSON.stringify(playlist._id) == JSON.stringify(req.playlist._id)
+      JSON.stringify(playlist.playlistId) === JSON.stringify(req.playlist._id)
   );
 
   listRecordInUser.name = name;

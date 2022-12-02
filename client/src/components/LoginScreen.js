@@ -1,4 +1,4 @@
-import { useContext } from "react";
+import { useContext, useEffect } from "react";
 import AuthContext from "../auth";
 
 // import Copyright from "./Copyright";
@@ -19,6 +19,10 @@ import ErrorModal from "./ErrorModal";
 
 export default function LoginScreen() {
   const { auth } = useContext(AuthContext);
+
+  useEffect(() => {
+    window.songId = undefined;
+  }, []);
 
   const handleSubmit = (event) => {
     event.preventDefault();

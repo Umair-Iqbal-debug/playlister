@@ -3,6 +3,7 @@ import SongCard from "./SongCard.js";
 import Box from "@mui/material/Box";
 import { List } from "@mui/material";
 import { GlobalStoreContext } from "../store/index.js";
+import PublishedSongCard from "./PublishedSongCard.js";
 
 /*
     This React component lets us edit a loaded list, which only
@@ -19,7 +20,14 @@ function WorkspaceScreen({ playlist }) {
         {store.currentList &&
           store.currentList._id === playlist._id &&
           store.currentList.songs.map((song, idx) => {
-            return (
+            return store.currentList.isPublished.status ? (
+              <PublishedSongCard
+                id={"playlist-song-" + idx}
+                key={"playlist-song-" + idx}
+                song={song}
+                index={idx}
+              />
+            ) : (
               <SongCard
                 id={"playlist-song-" + idx}
                 key={"playlist-song-" + idx}

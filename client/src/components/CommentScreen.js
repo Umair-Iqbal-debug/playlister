@@ -26,6 +26,7 @@ function CommentScreen() {
     overflow: "scroll",
     gap: "1rem",
     minHeight: "575px",
+    position: "relative",
   };
 
   let commentCards = "";
@@ -53,7 +54,7 @@ function CommentScreen() {
           top: 0,
           left: 0,
           right: 0,
-          bottom: "1.5em",
+          bottom: "5em",
         }}
       >
         {commentCards}

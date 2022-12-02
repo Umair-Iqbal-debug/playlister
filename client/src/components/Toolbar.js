@@ -46,7 +46,7 @@ function Toolbar() {
         variant="contained"
         onClick={handleUndo}
       >
-        <UndoRounded sx={{ color: color }} fontSize="large" />
+        <UndoRounded fontSize="large" />
       </Button>
 
       <Button
@@ -75,10 +75,8 @@ function Toolbar() {
     auth.user &&
     auth.user.email == store.currentList.user.email;
 
-  console.log(isOwner);
-
   const duplicateBtn = (
-    <Button onClick={handleDuplicate}>
+    <Button onClick={handleDuplicate} variant="contained">
       <ContentCopyIcon fontSize="large" />
     </Button>
   );

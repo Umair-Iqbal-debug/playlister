@@ -1,4 +1,5 @@
 import * as React from "react";
+import { useState, useEffect } from "react";
 import Accordion from "@mui/material/Accordion";
 import AccordionSummary from "@mui/material/AccordionSummary";
 import AccordionDetails from "@mui/material/AccordionDetails";
@@ -31,7 +32,7 @@ export default function PublishedPlaylistCard({ playlist }) {
     }
   });
 
-  const [likeStatus, setLikeStatus] = React.useState(0);
+  const [likeStatus, setLikeStatus] = useState(0);
 
   let expanded = false;
 
@@ -119,6 +120,7 @@ export default function PublishedPlaylistCard({ playlist }) {
       >
         <AccordionSummary aria-controls="panel1a-content" id="panel1a-header">
           <div
+            id={`detail-${playlist._id}`}
             style={{
               position: "relative",
               display: "flex",

@@ -9,17 +9,16 @@ import { SearchMode } from "../store";
 function PlaylistList(props) {
   const { store } = useContext(GlobalStoreContext);
 
-  console.log(store.idNamePairs);
+  useEffect(() => {
+    store.search();
+  }, [store.searchMode, store.sortMode]);
 
   useEffect(() => {
-    let mode = store.searchMode;
-    if (mode === SearchMode.HOME) store.loadIdNamePairs();
-    else store.getAllPublishedPlaylists();
-  }, [store.searchMode]);
-
-  useEffect(() => {
-    console.log(store.idNamePairs);
-  }, [store.idNamePairs]);
+    if (store.currentList) {
+      const id = `detail-${store.currentList._id}`;
+      document.getElementById(id).scrollIntoView({ behavior: "smooth" });
+    }
+  }, [store.currentList]);
 
   return (
     <div

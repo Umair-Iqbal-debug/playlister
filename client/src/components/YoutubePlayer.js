@@ -61,6 +61,7 @@ function YoutubePlayer(props) {
       currentList[currentIdx]
     ) {
       player.loadVideoById(currentList[currentIdx].youTubeId);
+      window.songId = currentList[currentIdx].youTubeId;
     }
   }, [currentIdx, player, currentList]);
 
@@ -76,7 +77,8 @@ function YoutubePlayer(props) {
       height: "390",
       width: "500",
       controls: "0",
-      videoId: currentIdx > -1 && currentList ? currentList[currentIdx] : "",
+      videoId:
+        currentIdx > -1 && currentList ? currentList[currentIdx].youTubeId : "",
       playerVars: {
         playsinline: 1,
         origin: window.location,
@@ -91,6 +93,8 @@ function YoutubePlayer(props) {
   }
 
   const onPlayerReady = (event) => {
+    // console.log("SONG ID:", window.songId);
+    if (store.currentList) event.target.loadVideoById(window.songId);
     event.target.playVideo();
   };
 
@@ -170,7 +174,6 @@ function YoutubePlayer(props) {
         toggleShuffle={toggleShuffle}
         shuffle={shuffle}
       />
-      <Button onClick={handleClick}>Select playlist</Button>
     </Box>
   );
 }

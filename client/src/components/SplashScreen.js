@@ -23,6 +23,13 @@ function SplashScreen(props) {
   const buttonStyles = {
     width: "197px",
     height: "42px",
+    backgroundColor: "black",
+    "&:hover": { backgroundColor: "black" },
+  };
+
+  const linkStyles = {
+    textDecoration: "none",
+    color: "white",
   };
 
   return (
@@ -30,23 +37,42 @@ function SplashScreen(props) {
       <Typography variant="h1" sx={{ fontWeight: "bold" }}>
         Welcome to playlister
       </Typography>
-      <Typography variant="h5">
+      <Typography variant="h6" sx={{ width: "500px" }}>
         Playlister is an app you can use to create, edit and play playlists of
         YouTube Music Videos. You can also view and comment on playlists made by
         other users
       </Typography>
 
       <Box sx={buttonBoxStyle}>
-        <Button sx={buttonStyles} variant="outlined">
-          <Link to="/login">Login</Link>
+        <Button
+          sx={buttonStyles}
+          variant="contained"
+          component={Link}
+          to="/login"
+        >
+          login
         </Button>
-        <Button sx={buttonStyles} variant="outlined">
-          <Link to="/register">Create new account</Link>
+        <Button
+          sx={buttonStyles}
+          variant="contained"
+          component={Link}
+          to="/register"
+        >
+          Create new account
         </Button>
-        <Button sx={buttonStyles} variant="outlined">
-          <Link to="/">Continue As a guest</Link>
+        <Button
+          sx={buttonStyles}
+          variant="contained"
+          component={Link}
+          to="/homescreen"
+        >
+          Continue As a guest
         </Button>
       </Box>
+
+      <Typography sx={{ position: "absolute", bottom: "5px" }}>
+        © Umair Hoda
+      </Typography>
     </Box>
   );
 }
