@@ -41,6 +41,7 @@ export const GlobalStoreActionType = {
   DUPLICATE: "DUPLICATE",
   OPEN_PUBLISHED_PLAYLIST: "OPEN_PUBLISHED_PLAYLIST",
   SET_SORT_MODE: "SET_SORT_MODE",
+  SET_COMMENTS: "SET_COMMENTS",
 };
 
 // WE'LL NEED THIS TO PROCESS TRANSACTIONS
@@ -89,6 +90,7 @@ function GlobalStoreContextProvider(props) {
     errorMessage: null,
     listIdMarkedForEdit: null,
     sortMode: SortMode.NAME,
+    comments: [],
   });
   const history = useNavigate();
 
@@ -117,6 +119,7 @@ function GlobalStoreContextProvider(props) {
           searchText: store.searchText,
           listIdMarkedForEdit: null,
           sortMode: store.sortMode,
+          comments: store.comments,
         });
       }
       // LIST UPDATE OF ITS NAME
@@ -136,6 +139,7 @@ function GlobalStoreContextProvider(props) {
           searchText: store.searchText,
           listIdMarkedForEdit: null,
           sortMode: store.sortMode,
+          comments: store.comments,
         });
       }
       // STOP EDITING THE CURRENT LIST
@@ -155,6 +159,7 @@ function GlobalStoreContextProvider(props) {
           searchText: store.searchText,
           listIdMarkedForEdit: null,
           sortMode: store.sortMode,
+          comments: [],
         });
       }
       // CREATE A NEW LIST
@@ -174,6 +179,7 @@ function GlobalStoreContextProvider(props) {
           searchText: store.searchText,
           listIdMarkedForEdit: null,
           sortMode: store.sortMode,
+          comments: store.comments,
         });
       }
       // GET ALL THE LISTS SO WE CAN PRESENT THEM
@@ -193,6 +199,7 @@ function GlobalStoreContextProvider(props) {
           searchText: store.searchText,
           listIdMarkedForEdit: null,
           sortMode: store.sortMode,
+          comments: store.comments,
         });
       }
       // PREPARE TO DELETE A LIST
@@ -212,6 +219,7 @@ function GlobalStoreContextProvider(props) {
           searchText: store.searchText,
           listIdMarkedForEdit: null,
           sortMode: store.sortMode,
+          comments: store.comments,
         });
       }
       // UPDATE A LIST
@@ -231,6 +239,7 @@ function GlobalStoreContextProvider(props) {
           searchText: store.searchText,
           listIdMarkedForEdit: null,
           sortMode: store.sortMode,
+          comments: store.comments,
         });
       }
       // START EDITING A LIST NAME
@@ -250,6 +259,7 @@ function GlobalStoreContextProvider(props) {
           searchText: store.searchText,
           listIdMarkedForEdit: null,
           sortMode: store.sortMode,
+          comments: store.comments,
         });
       }
       //
@@ -269,6 +279,7 @@ function GlobalStoreContextProvider(props) {
           searchText: store.searchText,
           listIdMarkedForEdit: null,
           sortMode: store.sortMode,
+          comments: store.comments,
         });
       }
       case GlobalStoreActionType.REMOVE_SONG: {
@@ -287,6 +298,7 @@ function GlobalStoreContextProvider(props) {
           searchText: store.searchText,
           listIdMarkedForEdit: null,
           sortMode: store.sortMode,
+          comments: store.comments,
         });
       }
       case GlobalStoreActionType.HIDE_MODALS: {
@@ -305,6 +317,7 @@ function GlobalStoreContextProvider(props) {
           searchText: store.searchText,
           listIdMarkedForEdit: null,
           sortMode: store.sortMode,
+          comments: store.comments,
         });
       }
       case GlobalStoreActionType.ERROR_MODAL: {
@@ -323,6 +336,7 @@ function GlobalStoreContextProvider(props) {
           searchText: store.searchText,
           listIdMarkedForEdit: null,
           sortMode: store.sortMode,
+          comments: store.comments,
         });
       }
 
@@ -342,6 +356,7 @@ function GlobalStoreContextProvider(props) {
           searchText: store.searchText,
           listIdMarkedForEdit: null,
           sortMode: store.sortMode,
+          comments: store.comments,
         });
       }
       case GlobalStoreActionType.SEARCH: {
@@ -360,6 +375,7 @@ function GlobalStoreContextProvider(props) {
           searchText: payload.searchText,
           listIdMarkedForEdit: null,
           sortMode: store.sortMode,
+          comments: store.comments,
         });
       }
 
@@ -382,6 +398,7 @@ function GlobalStoreContextProvider(props) {
           searchText: payload.searchText,
           listIdMarkedForEdit: null,
           sortMode: store.sortMode,
+          comments: store.comments,
         });
       }
 
@@ -401,6 +418,7 @@ function GlobalStoreContextProvider(props) {
           searchText: payload.searchText,
           listIdMarkedForEdit: null,
           sortMode: store.sortMode,
+          comments: store.comments,
         });
       }
 
@@ -420,6 +438,27 @@ function GlobalStoreContextProvider(props) {
           searchText: store.searchText,
           listIdMarkedForEdit: null,
           sortMode: payload,
+          comments: store.comments,
+        });
+      }
+
+      case GlobalStoreActionType.SET_COMMENTS: {
+        return setStore({
+          currentModal: CurrentModal.NONE,
+          errorMessage: null,
+          idNamePairs: store.idNamePairs,
+          currentList: store.currentList,
+          currentSongIndex: store.currentSongIndex,
+          currentSong: null,
+          newListCounter: store.newListCounter,
+          listNameActive: false,
+          listIdMarkedForDeletion: null,
+          listMarkedForDeletion: null,
+          searchMode: store.searchMode,
+          searchText: store.searchText,
+          listIdMarkedForEdit: null,
+          sortMode: store.sortMode,
+          comments: payload,
         });
       }
 
@@ -930,14 +969,27 @@ function GlobalStoreContextProvider(props) {
   store.postComment = function (id, text) {
     async function asyncPostComment(id, text) {
       let response = await api.postComment(id, text);
-      let updatedPlaylist = response.data.playlist;
+      let comments = response.data.comments;
 
       storeReducer({
-        type: GlobalStoreActionType.SET_CURRENT_LIST,
-        payload: updatedPlaylist,
+        type: GlobalStoreActionType.SET_COMMENTS,
+        payload: comments,
       });
     }
     asyncPostComment(id, text);
+  };
+
+  store.fetchComments = function () {
+    async function asyncFetchComments(id) {
+      let response = await api.fetchCommentById(id);
+      let comments = response.data.comments;
+      storeReducer({
+        type: GlobalStoreActionType.SET_COMMENTS,
+        payload: comments,
+      });
+    }
+
+    asyncFetchComments(store.currentList._id);
   };
 
   store.sortByName = () => {

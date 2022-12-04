@@ -63,7 +63,7 @@ postComment = async (req, res) => {
 
   const updatedPlaylist = await req.playlist.save();
 
-  res.status(200).json({ success: true, playlist: updatedPlaylist });
+  res.status(200).json({ success: true, comments: updatedPlaylist.comments });
 };
 
 // /like: Boolean,
@@ -121,9 +121,16 @@ getPublishedPlaylistById = async (req, res) => {
   return res.status(200).json({ sucess: true, playlist: updatedPlaylist });
 };
 
+getComments = (req, res) => {
+  return res
+    .status(200)
+    .json({ sucess: true, comments: req.playlist.comments });
+};
+
 module.exports = {
   getPublishedPlaylists,
   postComment,
   postLikeStatus,
   getPublishedPlaylistById,
+  getComments,
 };

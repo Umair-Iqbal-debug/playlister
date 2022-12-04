@@ -74,6 +74,9 @@ export const postLikeStatus = (id, likeStatus) => {
   });
 };
 
+export const fetchCommentById = (id) => {
+  return api.get(`publishedPlaylists/comments/${id}`);
+};
 const apis = {
   createPlaylist,
   deletePlaylistById,
@@ -86,6 +89,7 @@ const apis = {
   getPublishedPlaylistsById,
   postComment,
   postLikeStatus,
+  fetchCommentById,
 };
 
 export default apis;

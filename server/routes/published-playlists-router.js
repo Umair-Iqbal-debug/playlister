@@ -11,12 +11,6 @@ const auth = require("../auth");
 const PlaylisterMiddleware = require("../middleware/playlistMiddleware");
 
 // attach playlist and verify its published
-router.use(
-  "/*/:id",
-  auth.verify,
-  PlaylisterMiddleware.attachPlaylist,
-  PlaylisterMiddleware.verifyPublished
-);
 
 router.get("/", PlaylistController.getPublishedPlaylists);
 router.get(
@@ -25,7 +19,24 @@ router.get(
   PlaylisterMiddleware.verifyPublished,
   PlaylistController.getPublishedPlaylistById
 );
-router.post("/comments/:id", PlaylistController.postComment);
-router.post("/like/:id", PlaylistController.postLikeStatus);
+router.post(
+  "/comments/:id",
+  auth.verify,
+  PlaylisterMiddleware.attachPlaylist,
+  PlaylisterMiddleware.verifyPublished,
+  PlaylistController.postComment
+);
+router.get(
+  "/comments/:id",
+  PlaylisterMiddleware.attachPlaylist,
+  PlaylistController.getComments
+);
+router.post(
+  "/like/:id",
+  auth.verify,
+  PlaylisterMiddleware.attachPlaylist,
+  PlaylisterMiddleware.verifyPublished,
+  PlaylistController.postLikeStatus
+);
 
 module.exports = router;

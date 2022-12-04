@@ -1,4 +1,4 @@
-import React, { useState, useContext } from "react";
+import React, { useState, useContext, useEffect } from "react";
 import CommentCard from "./CommentCard";
 import { Box, TextField } from "@mui/material";
 import GlobalStoreContext from "../store";
@@ -8,6 +8,10 @@ function CommentScreen() {
   const [text, setText] = useState("");
   const { store } = useContext(GlobalStoreContext);
   const { auth } = useContext(AuthContext);
+
+  useEffect(() => {
+    if (store.currentList) store.fetchComments();
+  }, [store.currentList]);
 
   const onChange = (event) => {
     setText(event.target.value);
@@ -29,16 +33,6 @@ function CommentScreen() {
     position: "relative",
   };
 
-  let commentCards = "";
-
-  if (store.currentList) {
-    commentCards = store.currentList.comments.map((comment) => (
-      <CommentCard
-        comment={{ text: comment.text, username: comment.username }}
-      />
-    ));
-  }
-
   return (
     <Box sx={style}>
       <Box
@@ -57,7 +51,11 @@ function CommentScreen() {
           bottom: "5em",
         }}
       >
-        {commentCards}
+        {store.comments.map((comment) => (
+          <CommentCard
+            comment={{ text: comment.text, username: comment.username }}
+          />
+        ))}
       </Box>
       <TextField
         onKeyDown={keyDownHandler}
