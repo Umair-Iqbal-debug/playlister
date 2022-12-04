@@ -18,7 +18,7 @@ function TabPanel(props) {
       aria-labelledby={`simple-tab-${index}`}
       {...other}
     >
-      {value === index && (
+      {
         <Card
           elevation={2}
           sx={{
@@ -29,7 +29,7 @@ function TabPanel(props) {
         >
           {children}
         </Card>
-      )}
+      }
     </div>
   );
 }

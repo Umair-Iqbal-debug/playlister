@@ -37,7 +37,7 @@ function HomeScreen(props) {
       style={{
         width: "100%",
         height: "100%",
-        marginTop: "62px",
+        marginTop: "30px",
         backgroundColor: "#c4c4c4",
         // border: "2px solid red",
       }}
