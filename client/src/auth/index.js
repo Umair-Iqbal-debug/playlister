@@ -107,7 +107,7 @@ function AuthContextProvider(props) {
             user: response.data.user,
           },
         });
-        history("/");
+        history("/login");
       }
     } catch ({ response }) {
       this.showErrorModal(response.data.errorMessage);
