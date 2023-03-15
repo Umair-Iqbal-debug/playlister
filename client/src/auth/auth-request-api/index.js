@@ -13,7 +13,7 @@
 import axios from "axios";
 axios.defaults.withCredentials = true;
 const api = axios.create({
-  baseURL: "https://playlister-api.onrender.com/auth",
+  baseURL: "https://playlister-api-z9eh.onrender.com/auth/",
 });
 
 // THESE ARE ALL THE REQUESTS WE`LL BE MAKING, ALL REQUESTS HAVE A
