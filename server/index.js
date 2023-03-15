@@ -13,7 +13,7 @@ const app = express();
 app.use(express.urlencoded({ extended: true }));
 app.use(
   cors({
-    origin: ["https://playlister-z6nl.onrender.com/"],
+    origin: "*",
     credentials: true,
   })
 );
