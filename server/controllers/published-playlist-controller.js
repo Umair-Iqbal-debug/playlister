@@ -9,6 +9,8 @@ const SortMode = {
   NAME: "NAME",
 };
 
+const debug = "published-playlist-controller";
+
 //router.get("/", PlaylistController.getPublishedPlaylists);
 // router.post("/comments/:id", PlaylistController.postComment);
 // router.post("/like/:id", PlaylistController.postLike);
@@ -34,10 +36,10 @@ getPublishedPlaylists = async (req, res) => {
       searchParam = "-isPublished.date";
 
     defaultSearch = searchParam;
-    console.log("HERE", req.query.searchParam);
+    console.log(debug, 37, req.query.searchParam);
   }
 
-  console.log(defaultSearch);
+  console.log(debug, 42, defaultSearch);
 
   // need to add firstName and lastName into fields
   const fields =
@@ -117,7 +119,7 @@ postLikeStatus = async (req, res) => {
 getPublishedPlaylistById = async (req, res) => {
   req.playlist.listens += 1;
   let updatedPlaylist = await req.playlist.save();
-  console.log(updatedPlaylist);
+  console.log(debug, 122, updatedPlaylist);
   return res.status(200).json({ sucess: true, playlist: updatedPlaylist });
 };
 

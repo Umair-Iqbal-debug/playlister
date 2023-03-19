@@ -1,6 +1,8 @@
 const Playlist = require("../models/playlist-model");
 const User = require("../models/user-model");
 
+const debug = "playlist-controller";
+
 const SortMode = {
   LISTENS: "LISTENS",
   LIKES: "LIKES",
@@ -38,8 +40,8 @@ createPlaylist = async (req, res) => {
     (playlist) => playlist.name === newPlaylist.name
   );
 
-  console.log(body);
-  console.log(userOwnedPlaylists);
+  console.log(debug, 43, body);
+  console.log(debug, 44, userOwnedPlaylists);
 
   // if they do increase the counter of the original by one and create new list with name + counter
   if (duplicate) {
@@ -95,21 +97,25 @@ getPlaylistById = async (req, res) => {
 
 getPlaylistPairs = async (req, res) => {
   await User.findOne({ _id: req.userId }, (err, user) => {
-    console.log("find user with id " + req.userId);
+    console.log(debug, 100, "find user with id " + req.userId);
     async function asyncFindList(email) {
-      console.log("find all Playlists owned by " + email);
+      console.log(debug, 102, "find all Playlists owned by " + email);
       await Playlist.find({ ownerEmail: email }, (err, playlists) => {
-        console.log("found Playlists: " + JSON.stringify(playlists));
+        console.log(
+          debug,
+          104,
+          "found Playlists: " + JSON.stringify(playlists)
+        );
         if (err) {
           return res.status(400).json({ success: false, error: err });
         }
         if (!playlists) {
-          console.log("!playlists.length");
+          console.log(debug, 109, "!playlists.length");
           return res
             .status(404)
             .json({ success: false, error: "Playlists not found" });
         } else {
-          console.log("Send the Playlist pairs");
+          console.log(debug, 114, "Send the Playlist pairs");
           // PUT ALL THE LISTS INTO ID, NAME PAIRS
           let pairs = [];
           for (let key in playlists) {
@@ -122,10 +128,10 @@ getPlaylistPairs = async (req, res) => {
           }
           return res.status(200).json({ success: true, idNamePairs: pairs });
         }
-      }).catch((err) => console.log(err));
+      }).catch((err) => console.log(debug, 127, err));
     }
     asyncFindList(user.email);
-  }).catch((err) => console.log(err));
+  }).catch((err) => console.log(debug, 130, err));
 };
 
 getPlaylists = async (req, res) => {
@@ -146,14 +152,14 @@ getPlaylists = async (req, res) => {
   }
 
   const playlists = await Playlist.find(queryObj).sort(defaultSortParam);
-  console.log("HERE", defaultSortParam, queryObj);
+  console.log(debug, 151, defaultSortParam, queryObj);
   return res.status(200).json({ success: true, playlists: playlists });
 };
 
 updatePlaylist = async (req, res) => {
   const body = req.body;
-  console.log("updatePlaylist: " + JSON.stringify(body));
-  console.log("req.body.name: " + req.body.name);
+  console.log(debug, 157, "updatePlaylist: " + JSON.stringify(body));
+  console.log(debug, 158, "req.body.name: " + req.body.name);
 
   if (!body || body.name === undefined || body.songs === undefined) {
     return res.status(400).json({
@@ -180,7 +186,7 @@ updatePlaylist = async (req, res) => {
 
   // if they do increase the counter of the original by one and create new list with name + counter
 
-  console.log(req.playlist._id);
+  console.log(debug, 185, req.playlist._id);
   if (
     duplicate &&
     JSON.stringify(duplicate.playlistId) !== JSON.stringify(req.playlist._id)

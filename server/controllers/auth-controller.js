@@ -2,10 +2,12 @@ const auth = require("../auth");
 const User = require("../models/user-model");
 const bcrypt = require("bcryptjs");
 
+const debug = "auth-controller";
+
 getLoggedIn = async (req, res) => {
   try {
     let userId = auth.verifyUser(req);
-    console.log(userId);
+    console.log(debug, 10, userId);
     if (!userId) {
       return res.status(200).json({
         loggedIn: false,
@@ -15,7 +17,7 @@ getLoggedIn = async (req, res) => {
     }
 
     const loggedInUser = await User.findOne({ _id: userId });
-    console.log("loggedInUser: " + loggedInUser);
+    console.log(debug, 20, "loggedInUser: " + loggedInUser);
 
     return res.status(200).json({
       loggedIn: true,
@@ -27,17 +29,17 @@ getLoggedIn = async (req, res) => {
       },
     });
   } catch (err) {
-    console.log("err: " + err);
+    console.log(debug, 32, "err: " + err);
     res.json(false);
   }
 };
 
 loginUser = async (req, res) => {
-  console.log("loginUser");
+  console.log(debug, 38, "loginUser");
   try {
     const { email, password } = req.body;
 
-    console.log(email, password);
+    console.log(debug, 42, email, password);
 
     if (!email || !password) {
       return res
@@ -46,7 +48,7 @@ loginUser = async (req, res) => {
     }
 
     const existingUser = await User.findOne({ email: email });
-    console.log("existingUser: " + existingUser);
+    console.log(debug, 51, "existingUser: " + existingUser);
     if (!existingUser) {
       return res.status(401).json({
         errorMessage: "Wrong email or password provided.",
@@ -87,7 +89,7 @@ loginUser = async (req, res) => {
         },
       });
   } catch (err) {
-    console.error(err);
+    console.log("ERROR!!");
     res.status(500).send();
   }
 };
@@ -183,7 +185,7 @@ registerUser = async (req, res) => {
         },
       });
 
-    console.log("token sent");
+    console.log(debug, 186, "token sent");
   } catch (err) {
     console.error(err);
     res.status(500).send();
