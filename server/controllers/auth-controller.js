@@ -69,7 +69,7 @@ loginUser = async (req, res) => {
 
     // LOGIN THE USER
     const token = auth.signToken(existingUser._id, existingUser.username);
-    console.log(token);
+    console.log(debug, 72, "TOKEN:", token);
 
     res
       .cookie("token", token, {
