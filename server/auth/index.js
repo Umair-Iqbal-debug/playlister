@@ -1,10 +1,12 @@
 const jwt = require("jsonwebtoken");
-
+const debug = "auth-index";
 function authManager() {
   verify = (req, res, next) => {
     try {
       const token = req.cookies.token;
-      console.log(req.cookies);
+      console.log(debug, 7, req.cookies);
+      console.log(debug, 8, "printing the request obj", req);
+
       if (!token) {
         return res.status(401).json({
           loggedIn: false,
