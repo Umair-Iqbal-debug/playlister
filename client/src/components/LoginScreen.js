@@ -34,7 +34,7 @@ export default function LoginScreen() {
   };
 
   return (
-    <Grid container component="main" sx={{ height: "65vh" }} className="middle">
+    <Grid container component="main" className="middle">
       <CssBaseline />
       <Grid
         item

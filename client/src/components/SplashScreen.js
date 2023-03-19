@@ -3,28 +3,17 @@ import React from "react";
 import { Link } from "react-router-dom";
 
 function SplashScreen(props) {
-  const style = {
-    display: "flex",
-    alignItems: "center",
-    justifyContent: "center",
-    height: "100%",
-    width: "100%",
-    flexDirection: "column",
-    gap: "5em",
-    background: "linear-gradient(white,grey)",
-  };
-
   const buttonBoxStyle = {
     display: "flex",
-    displayDirection: "row",
-    gap: "5em",
+    flexDirection: "column",
+    gap: "10px",
   };
 
   const buttonStyles = {
     width: "197px",
-    height: "42px",
-    backgroundColor: "black",
-    "&:hover": { backgroundColor: "black" },
+    height: "30px",
+    backgroundColor: "#1BA098",
+    "&:hover": { backgroundColor: "#051622" },
   };
 
   const linkStyles = {
@@ -33,15 +22,13 @@ function SplashScreen(props) {
   };
 
   return (
-    <Box sx={style}>
-      <Typography variant="h1" sx={{ fontWeight: "bold" }}>
-        Welcome to playlister
-      </Typography>
-      <Typography variant="h6" sx={{ width: "500px" }}>
+    <div className="splash-screen-container">
+      <h1 className="splash-title">Playlister</h1>
+      <h6 className="splash-desc">
         Playlister is an app you can use to create, edit and play playlists of
         YouTube Music Videos. You can also view and comment on playlists made by
         other users
-      </Typography>
+      </h6>
 
       <Box sx={buttonBoxStyle}>
         <Button
@@ -70,10 +57,12 @@ function SplashScreen(props) {
         </Button>
       </Box>
 
-      <Typography sx={{ position: "absolute", bottom: "5px" }}>
+      <Typography
+        sx={{ position: "absolute", bottom: "5px", color: "#DEB992" }}
+      >
         © Umair Hoda
       </Typography>
-    </Box>
+    </div>
   );
 }
 

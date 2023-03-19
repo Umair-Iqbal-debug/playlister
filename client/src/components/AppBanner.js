@@ -10,6 +10,7 @@ import Menu from "@mui/material/Menu";
 import MenuItem from "@mui/material/MenuItem";
 import Toolbar from "@mui/material/Toolbar";
 import Typography from "@mui/material/Typography";
+import YouTubeIcon from "@mui/icons-material/YouTube";
 
 export default function AppBanner() {
   const { auth } = useContext(AuthContext);
@@ -97,16 +98,12 @@ export default function AppBanner() {
         flexGrow: 1,
         backgroundColor: "#e0e0e0",
         display: "block",
-        position: "absolute",
-        top: 0,
-        left: 0,
-        right: 0,
       }}
     >
       <AppBar position="static" sx={{ backgroundColor: "#e0e0e0" }}>
         <Toolbar>
           <Typography variant="h4" sx={{ color: "red" }}>
-            Playlister
+            <YouTubeIcon />
           </Typography>
           <Box sx={{ display: { xs: "none", md: "flex", marginLeft: "auto" } }}>
             <IconButton
