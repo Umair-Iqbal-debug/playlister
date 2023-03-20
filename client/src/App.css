@@ -272,15 +272,18 @@ iframe {
 /* Mobile */
 @media screen and (min-width: 425px) {
   .splash-title {
-    font-size: 90px;
+    font-family: "Roboto", sans-serif;
+    font-family: "Roboto Mono", monospace;
+    font-family: "The Nautigal", cursive;
+    font-size: 60px;
     color: #deb992;
   }
 
   .splash-desc {
     font-family: "Roboto", sans-serif;
     font-family: "Roboto Mono", monospace;
-    font-size: 20px;
-    max-width: 600px;
+    font-size: 10px;
+    max-width: 200px;
     color: #deb992;
   }
 }
@@ -293,6 +296,18 @@ iframe {
 
 /* Desktop */
 @media screen and (min-width: 1024px) {
+  .splash-title {
+    font-size: 90px;
+    color: #deb992;
+  }
+
+  .splash-desc {
+    font-family: "Roboto", sans-serif;
+    font-family: "Roboto Mono", monospace;
+    font-size: 20px;
+    max-width: 600px;
+    color: #deb992;
+  }
 }
 @media screen and (min-width: 1440px) {
 }
