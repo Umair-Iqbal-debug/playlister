@@ -30,6 +30,18 @@
   color: #deb992;
 }
 /* ****************************** */
+
+/* LOGIN SCREEN STYLES */
+
+.form-container {
+  flex: 1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: #051622;
+}
+
+/* ******************** */
 .main-content {
   display: grid;
   grid-template-columns: 60% 40%;
@@ -255,4 +267,32 @@ iframe {
   100% {
     transform: rotate(0deg);
   }
+}
+
+/* Mobile */
+@media screen and (min-width: 425px) {
+  .splash-title {
+    font-size: 90px;
+    color: #deb992;
+  }
+
+  .splash-desc {
+    font-family: "Roboto", sans-serif;
+    font-family: "Roboto Mono", monospace;
+    font-size: 20px;
+    max-width: 600px;
+    color: #deb992;
+  }
+}
+
+/* Tablet */
+@media screen and (min-width: 620px) {
+}
+@media screen and (min-width: 768px) {
+}
+
+/* Desktop */
+@media screen and (min-width: 1024px) {
+}
+@media screen and (min-width: 1440px) {
 }

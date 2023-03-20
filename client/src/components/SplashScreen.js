@@ -2,6 +2,9 @@ import { Box, Button, Typography } from "@mui/material";
 import React from "react";
 import { Link } from "react-router-dom";
 
+const primary_color = "#051622";
+const textcolor = "#deb992";
+
 function SplashScreen(props) {
   const buttonBoxStyle = {
     display: "flex",

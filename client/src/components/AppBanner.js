@@ -89,23 +89,17 @@ export default function AppBanner() {
     let userInitials = auth.getUserInitials();
     console.log("userInitials: " + userInitials);
     if (loggedIn) return <div>{userInitials}</div>;
-    else return <AccountCircle />;
+    else return <AccountCircle sx={{ color: "#deb992" }} />;
   }
 
   return (
-    <Box
-      sx={{
-        flexGrow: 1,
-        backgroundColor: "#e0e0e0",
-        display: "block",
-      }}
-    >
-      <AppBar position="static" sx={{ backgroundColor: "#e0e0e0" }}>
+    <Box>
+      <AppBar sx={{ backgroundColor: "#e0e0e0" }}>
         <Toolbar>
-          <Typography variant="h4" sx={{ color: "red" }}>
+          <Typography variant="h4" sx={{ color: "#deb992" }}>
             <YouTubeIcon />
           </Typography>
-          <Box sx={{ display: { xs: "none", md: "flex", marginLeft: "auto" } }}>
+          <Box sx={{ display: { md: "flex", marginLeft: "auto" } }}>
             <IconButton
               size="large"
               edge="end"
