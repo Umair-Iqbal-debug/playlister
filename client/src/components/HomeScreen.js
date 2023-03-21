@@ -28,20 +28,12 @@ function HomeScreen(props) {
 
   const addButton = (
     <IconButton onClick={handleCreateList}>
-      <AddIcon fontSize="large" />
+      <AddIcon sx={{ color: "#deb992" }} fontSize="large" />
     </IconButton>
   );
 
   return (
-    <div
-      style={{
-        width: "100%",
-        height: "100%",
-        marginTop: "30px",
-        backgroundColor: "#c4c4c4",
-        // border: "2px solid red",
-      }}
-    >
+    <div className="homescreen-container">
       <div className="container">
         <div className="nav-bar common">
           <SearchBar />
@@ -58,9 +50,6 @@ function HomeScreen(props) {
         >
           {store.searchMode === SearchMode.HOME ? addButton : ""}
 
-          <Typography sx={{ display: "inline" }} variant="h4">
-            {store.searchText || ""} Lists
-          </Typography>
           {modalJSX}
           <ErrorModalHomeScreen />
         </div>

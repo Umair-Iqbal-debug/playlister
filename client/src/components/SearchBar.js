@@ -124,10 +124,13 @@ function SearchBar(props) {
       </Menu>
     );
   }
+  const golden = "#deb992";
+  const icon_styles = { color: golden };
 
   return (
     <div
       style={{
+        marginTop: 14,
         display: "flex",
         alignItems: "center",
         justifyContent: "space-between",
@@ -136,26 +139,26 @@ function SearchBar(props) {
       {auth.loggedIn && (
         <IconButton onClick={() => setSearchMode("HOME")}>
           {store.searchMode !== "HOME" ? (
-            <HomeOutlinedIcon fontSize="large" />
+            <HomeOutlinedIcon fontSize="large" sx={icon_styles} />
           ) : (
-            <HomeRoundedIcon fontSize="large" />
+            <HomeRoundedIcon fontSize="large" sx={icon_styles} />
           )}
         </IconButton>
       )}
 
       <IconButton onClick={() => setSearchMode("ALL_LISTS")}>
         {searchMode !== "ALL_LISTS" ? (
-          <Groups2OutlinedIcon fontSize="large" />
+          <Groups2OutlinedIcon fontSize="large" sx={icon_styles} />
         ) : (
-          <Groups2RoundedIcon fontSize="large" />
+          <Groups2RoundedIcon fontSize="large" sx={icon_styles} />
         )}
       </IconButton>
 
       <IconButton onClick={() => setSearchMode("USERS")}>
         {searchMode !== "USERS" ? (
-          <PersonOutlineRoundedIcon fontSize="large" />
+          <PersonOutlineRoundedIcon fontSize="large" sx={icon_styles} />
         ) : (
-          <PersonRoundedIcon fontSize="large" />
+          <PersonRoundedIcon fontSize="large" sx={icon_styles} />
         )}
       </IconButton>
 
@@ -172,7 +175,7 @@ function SearchBar(props) {
         }}
       />
 
-      <Typography variant="button" sx={{ marginLeft: "auto" }}>
+      <Typography variant="button" sx={{ marginLeft: "auto", color: golden }}>
         SORT BY
       </Typography>
       <IconButton
@@ -181,7 +184,7 @@ function SearchBar(props) {
         aria-expanded={open ? "true" : undefined}
         onClick={handleClick}
       >
-        <SortOutlinedIcon fontSize="large" />
+        <SortOutlinedIcon sx={icon_styles} fontSize="large" />
       </IconButton>
 
       {menu}

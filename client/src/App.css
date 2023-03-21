@@ -1,6 +1,8 @@
 * {
   padding: 0;
   margin: 0;
+  -ms-overflow-style: none !important; /* IE and Edge */
+  scrollbar-width: none !important; /* Firefox */
 }
 /* SPLASH SCREEN STYLES */
 
@@ -42,11 +44,44 @@
 }
 
 /* ******************** */
+
+.homescreen-container {
+  width: 100%;
+  height: 100%;
+  margin-top: 30px;
+  background-color: #051622;
+}
 .main-content {
-  display: grid;
-  grid-template-columns: 60% 40%;
+  display: flex;
+  flex-direction: column-reverse;
+  gap: 10px;
   grid-row: 3/4;
   grid-column: span 12;
+  overflow: scroll;
+}
+
+.toolbar-buttons {
+  display: flex;
+  flex-direction: column;
+  padding: 1rem;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-items: center;
+  gap: 10px;
+}
+
+.playlists {
+  min-height: 600px;
+}
+.css-5fu25k-MuiList-root::-webkit-scrollbar {
+  display: none;
+}
+.css-oztbj8::-webkit-scrollbar {
+  display: none;
+}
+
+.css-1l88oy9-MuiButtonBase-root-MuiTab-root.Mui-selected {
+  color: #deb992;
 }
 
 .middle {
@@ -307,6 +342,28 @@ iframe {
     font-size: 20px;
     max-width: 600px;
     color: #deb992;
+  }
+
+  .main-content {
+    display: flex;
+    flex-direction: row;
+    gap: 10px;
+    grid-row: 3/4;
+    grid-column: span 12;
+    overflow: scroll;
+  }
+
+  .playlists {
+    min-width: 500px;
+  }
+
+  .toolbar-buttons {
+    display: flex;
+    flex-direction: row;
+    /* padding: 1rem; */
+    /* flex-wrap: wrap; */
+    align-items: center;
+    justify-content: space-between;
   }
 }
 @media screen and (min-width: 1440px) {

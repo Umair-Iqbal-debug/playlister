@@ -134,7 +134,7 @@ function YoutubePlayer(props) {
     alignItems: "center",
     justifyContent: "center",
     flexDirection: "column",
-    backgroundColor: "#d4d4f5",
+    backgroundColor: "white",
     borderRadius: "4px",
     gap: "1rem",
     height: "600px",

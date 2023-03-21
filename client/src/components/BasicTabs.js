@@ -6,31 +6,41 @@ import { Card } from "@mui/material/";
 import Box from "@mui/material/Box";
 import YoutubePlayer from "./YoutubePlayer";
 import CommentScreen from "./CommentScreen";
+import { createTheme, ThemeProvider } from "@mui/material/";
+
+const theme = createTheme({
+  palette: {
+    text: {
+      primary: "#deb992",
+    },
+  },
+});
 
 function TabPanel(props) {
   const { children, value, index, ...other } = props;
 
   return (
-    <div
-      role="tabpanel"
-      hidden={value !== index}
-      id={`simple-tabpanel-${index}`}
-      aria-labelledby={`simple-tab-${index}`}
-      {...other}
-    >
-      {
-        <Card
-          elevation={2}
-          sx={{
-            position: "relative",
-            backgroundColor: "#d4d4f6",
-            //minHeight: "600px",
-          }}
-        >
-          {children}
-        </Card>
-      }
-    </div>
+    <ThemeProvider theme={theme}>
+      <div
+        role="tabpanel"
+        hidden={value !== index}
+        id={`simple-tabpanel-${index}`}
+        aria-labelledby={`simple-tab-${index}`}
+        {...other}
+      >
+        {
+          <Card
+            elevation={2}
+            sx={{
+              position: "relative",
+              backgroundColor: "white !important",
+            }}
+          >
+            {children}
+          </Card>
+        }
+      </div>
+    </ThemeProvider>
   );
 }
 
@@ -55,18 +65,17 @@ export default function BasicTabs() {
   };
 
   return (
-    <Box sx={{ width: "100%", height: "100%" }}>
+    <Box sx={{ width: "100%", height: "100%", backgroundColor: "#051622" }}>
       <Box sx={{ borderBottom: 1, borderColor: "divider" }}>
         <Tabs
           value={value}
           onChange={handleChange}
-          aria-label="basic tabs example"
           sx={{
-            "& button:focus": { backgroundColor: "#2c2f70", color: "white" },
+            "& button:focus": { backgroundColor: "white", color: "#deb992" },
           }}
         >
-          <Tab label="Player" {...a11yProps(0)} />
-          <Tab label="Comments" {...a11yProps(1)} />
+          <Tab label="Player" {...a11yProps(0)} sx={{ color: "#deb992" }} />
+          <Tab label="Comments" {...a11yProps(1)} sx={{ color: "#deb992" }} />
         </Tabs>
       </Box>
       <TabPanel value={value} index={0}>

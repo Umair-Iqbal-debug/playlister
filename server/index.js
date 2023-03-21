@@ -9,6 +9,7 @@ dotenv.config();
 const PORT = process.env.PORT || 4000;
 const app = express();
 
+console.log(process.env.NODE_ENV);
 // SETUP THE MIDDLEWARE
 app.use(express.urlencoded({ extended: true }));
 app.use(

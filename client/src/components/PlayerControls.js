@@ -23,16 +23,15 @@ function PlayerControls({
     player.pauseVideo();
   };
   const style = {
-    color: "black",
+    color: "#deb992",
     fontSize: "3rem",
   };
   const containerStyle = {
     textAlign: "center",
-    backgroundColor: "#fffff1",
-    marginTop: "0.5em",
+    backgroundColor: "white",
     borderRadius: "20px",
     borderColor: "black",
-    paddingBottom: "1.1em",
+    // paddingBottom: "1.1em",
     marginBottom: "1em",
     // border: "1px solid black",
   };

@@ -20,9 +20,10 @@ function PublishedSongCard({ song, index }) {
       onClick={handleClick}
       sx={{
         padding: "1rem",
-        marginBottom: "0",
-        backgroundColor: "#2c2f70",
+        marginBottom: "2px",
+        backgroundColor: "#051622",
         cursor: "pointer",
+        borderRadius: "3px",
       }}
     >
       <ListItemText sx={{ color: color }} primary={primaryText} />

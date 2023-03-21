@@ -82,17 +82,17 @@ function Toolbar() {
   );
 
   return (
-    <Box sx={{ display: "flex", flexDirection: "row", padding: "1rem" }}>
+    <div className="toolbar-buttons">
       {!isPublished && undoRedo}
 
-      <ButtonGroup sx={{ marginLeft: "auto" }}>
+      <ButtonGroup>
         {!isPublished && publishBtn}
 
         {isOwner && deleteBtn}
 
         {auth.loggedIn && duplicateBtn}
       </ButtonGroup>
-    </Box>
+    </div>
   );
 }
 

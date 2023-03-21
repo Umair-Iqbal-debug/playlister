@@ -11,6 +11,7 @@ import MenuItem from "@mui/material/MenuItem";
 import Toolbar from "@mui/material/Toolbar";
 import Typography from "@mui/material/Typography";
 import YouTubeIcon from "@mui/icons-material/YouTube";
+import { color } from "@mui/system";
 
 export default function AppBanner() {
   const { auth } = useContext(AuthContext);
@@ -87,14 +88,13 @@ export default function AppBanner() {
 
   function getAccountMenu(loggedIn) {
     let userInitials = auth.getUserInitials();
-    console.log("userInitials: " + userInitials);
-    if (loggedIn) return <div>{userInitials}</div>;
+    if (loggedIn) return <div style={{ color: "#deb992" }}>{userInitials}</div>;
     else return <AccountCircle sx={{ color: "#deb992" }} />;
   }
 
   return (
     <Box>
-      <AppBar sx={{ backgroundColor: "#e0e0e0" }}>
+      <AppBar sx={{ backgroundColor: "white" }}>
         <Toolbar>
           <Typography variant="h4" sx={{ color: "#deb992" }}>
             <YouTubeIcon />
