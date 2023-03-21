@@ -21,14 +21,7 @@ function PlaylistList(props) {
   }, [store.currentList]);
 
   return (
-    <div
-      className="playlists common"
-      style={{
-        overflow: "scroll",
-        padding: "1rem",
-        height: "620px",
-      }}
-    >
+    <div className="playlists">
       {store.idNamePairs &&
         store.idNamePairs.map((playlist) => {
           if (playlist.isPublished.status)

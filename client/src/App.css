@@ -347,14 +347,17 @@ iframe {
   .main-content {
     display: flex;
     flex-direction: row;
-    gap: 10px;
+    gap: 20px;
     grid-row: 3/4;
     grid-column: span 12;
     overflow: scroll;
   }
 
   .playlists {
+    margin-top: 20px;
     min-width: 500px;
+    overflow: scroll;
+    padding: 1rem;
   }
 
   .toolbar-buttons {
