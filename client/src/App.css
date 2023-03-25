@@ -1,9 +1,18 @@
+@import url("https://fonts.googleapis.com/css2?family=Delicious+Handrawn&display=swap");
+
 * {
   padding: 0;
   margin: 0;
   -ms-overflow-style: none !important; /* IE and Edge */
   scrollbar-width: none !important; /* Firefox */
+  font-family: "Delicious Handrawn", cursive !important;
 }
+
+:root {
+  --primary-bg-color: #051622;
+  --text-color: #deb992;
+}
+
 /* SPLASH SCREEN STYLES */
 
 .splash-screen-container {
@@ -14,14 +23,14 @@
   width: 100%;
   flex-direction: column;
   gap: 5em;
-  background-color: #051622;
+  background-color: var(--primary-bg-color);
 }
 .splash-title {
   font-family: "Roboto", sans-serif;
   font-family: "Roboto Mono", monospace;
   font-family: "The Nautigal", cursive;
   font-size: 60px;
-  color: #deb992;
+  color: var(--text-color);
 }
 
 .splash-desc {
@@ -29,7 +38,13 @@
   font-family: "Roboto Mono", monospace;
   font-size: 10px;
   max-width: 200px;
-  color: #deb992;
+  color: var(--text-color);
+}
+
+.splash-button-box {
+  display: flex;
+  gap: 10px;
+  flex-direction: column;
 }
 /* ****************************** */
 
@@ -40,7 +55,7 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  background-color: #051622;
+  background-color: var(--primary-bg-color);
 }
 
 /* ******************** */
@@ -49,8 +64,15 @@
   width: 100%;
   height: 100%;
   margin-top: 30px;
-  background-color: #051622;
+  background-color: var(--primary-bg-color);
 }
+
+.sort-by-text {
+  visibility: hidden;
+  color: var(--text-color);
+  margin-left: auto;
+}
+
 .main-content {
   display: flex;
   flex-direction: column-reverse;
@@ -82,7 +104,7 @@
 }
 
 .css-1l88oy9-MuiButtonBase-root-MuiTab-root.Mui-selected {
-  color: #deb992;
+  color: var(--text-color);
 }
 
 .middle {
@@ -312,7 +334,7 @@ iframe {
     font-family: "Roboto Mono", monospace;
     font-family: "The Nautigal", cursive;
     font-size: 60px;
-    color: #deb992;
+    color: var(--text-color);
   }
 
   .splash-desc {
@@ -320,7 +342,7 @@ iframe {
     font-family: "Roboto Mono", monospace;
     font-size: 10px;
     max-width: 200px;
-    color: #deb992;
+    color: var(--text-color);
   }
 }
 
@@ -334,7 +356,7 @@ iframe {
 @media screen and (min-width: 1024px) {
   .splash-title {
     font-size: 90px;
-    color: #deb992;
+    color: var(--text-color);
   }
 
   .splash-desc {
@@ -342,7 +364,11 @@ iframe {
     font-family: "Roboto Mono", monospace;
     font-size: 20px;
     max-width: 600px;
-    color: #deb992;
+    color: var(--text-color);
+  }
+
+  .splash-button-box {
+    flex-direction: row;
   }
 
   .main-content {
@@ -368,6 +394,11 @@ iframe {
     /* flex-wrap: wrap; */
     align-items: center;
     justify-content: space-between;
+  }
+
+  .sort-by-text {
+    visibility: visible;
+    color: var(--text-color);
   }
 }
 @media screen and (min-width: 1440px) {

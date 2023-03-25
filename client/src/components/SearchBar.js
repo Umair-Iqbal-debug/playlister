@@ -175,9 +175,7 @@ function SearchBar(props) {
         }}
       />
 
-      <Typography variant="button" sx={{ marginLeft: "auto", color: golden }}>
-        SORT BY
-      </Typography>
+      <span className="sort-by-text">SORT BY</span>
       <IconButton
         aria-controls={open ? "basic-menu" : undefined}
         aria-haspopup="true"

@@ -6,12 +6,6 @@ const primary_color = "#051622";
 const textcolor = "#deb992";
 
 function SplashScreen(props) {
-  const buttonBoxStyle = {
-    display: "flex",
-    flexDirection: "column",
-    gap: "10px",
-  };
-
   const buttonStyles = {
     width: "197px",
     height: "30px",
@@ -33,7 +27,7 @@ function SplashScreen(props) {
         other users
       </h6>
 
-      <Box sx={buttonBoxStyle}>
+      <div className="splash-button-box">
         <Button
           sx={buttonStyles}
           variant="contained"
@@ -58,7 +52,7 @@ function SplashScreen(props) {
         >
           Continue As a guest
         </Button>
-      </Box>
+      </div>
 
       <Typography
         sx={{ position: "absolute", bottom: "5px", color: "#DEB992" }}
