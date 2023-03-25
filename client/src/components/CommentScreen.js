@@ -42,7 +42,7 @@ function CommentScreen() {
           flexDirection: "column",
           gap: "10px",
           overflow: "auto",
-          backgroundColor: "#d4d4f6",
+          backgroundColor: "white",
           padding: "1rem",
           position: "absolute",
           top: 0,

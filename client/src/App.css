@@ -36,7 +36,7 @@
 .splash-desc {
   font-family: "Roboto", sans-serif;
   font-family: "Roboto Mono", monospace;
-  font-size: 10px;
+  font-size: 15px;
   max-width: 200px;
   color: var(--text-color);
 }
@@ -95,7 +95,7 @@
 .playlists {
   min-height: 600px;
   margin-top: 30px;
-  overflow:scroll;
+  overflow: scroll;
 }
 .css-5fu25k-MuiList-root::-webkit-scrollbar {
   display: none;
