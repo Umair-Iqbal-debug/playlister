@@ -118,7 +118,9 @@ export default function PlaylistCard({ playlist }) {
       <div style={{ width: "100%", height: "20px" }}>
         <Typography>
           By:{" "}
-          <span style={{ textDecoration: "underline", color: "blue" }}>
+          <span
+            style={{ textDecoration: "underline", color: "var(--text-color)" }}
+          >
             {playlist.user.username}
           </span>
         </Typography>
