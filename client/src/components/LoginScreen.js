@@ -97,7 +97,6 @@ export default function LoginScreen() {
         <Container component="main" maxWidth="xs">
           <Box
             sx={{
-              marginTop: 20,
               display: "flex",
               flexDirection: "column",
               alignItems: "center",
@@ -126,6 +125,7 @@ export default function LoginScreen() {
                 name="email"
                 autoComplete="email"
                 autoFocus
+                size="small"
               />
               <TextField
                 margin="normal"
@@ -139,6 +139,7 @@ export default function LoginScreen() {
                 color="primary"
                 InputLabelProps={{ className: "textfield-label" }}
                 InputProps={{ className: "textfield" }}
+                size="small"
               />
               <FormControlLabel
                 control={<Checkbox value="remember" color="primary" />}
