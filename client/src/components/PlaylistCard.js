@@ -26,7 +26,7 @@ export default function PlaylistCard({ playlist }) {
   const theme = createTheme({
     palette: {
       primary: {
-        main: "var(--primary-bg-color)",
+        main: "#051622",
       },
     },
   });
@@ -118,9 +118,7 @@ export default function PlaylistCard({ playlist }) {
       <div style={{ width: "100%", height: "20px" }}>
         <Typography>
           By:{" "}
-          <span
-            style={{ textDecoration: "underline", color: "var(--text-color)" }}
-          >
+          <span style={{ textDecoration: "underline", color: "#deb992" }}>
             {playlist.user.username}
           </span>
         </Typography>
