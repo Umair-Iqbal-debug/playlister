@@ -26,7 +26,7 @@ export default function PlaylistCard({ playlist }) {
   const theme = createTheme({
     palette: {
       primary: {
-        main: "#2c2f70",
+        main: "var(--primary-bg-color)",
       },
     },
   });
