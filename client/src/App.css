@@ -12,7 +12,27 @@
   --primary-bg-color: #051622;
   --text-color: #deb992;
 }
+#player-detail-container,
+#player-detail-header {
+  display: none;
+}
 
+#player {
+  height: 200px;
+}
+/* Youtube player  */
+.playercontainer {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  background-color: white;
+  border-radius: 4px;
+  gap: 1rem;
+  /* max-height: 600px; */
+  width: "100% ";
+}
+/* ******** */
 /* SPLASH SCREEN STYLES */
 
 .splash-screen-container {
@@ -93,8 +113,8 @@
 }
 
 .playlists {
-  min-height: 600px;
-  margin-top: 30px;
+  max-height: 600px;
+  /* margin-top: 30px; */
   overflow: scroll;
 }
 .css-5fu25k-MuiList-root::-webkit-scrollbar {
@@ -382,7 +402,7 @@ iframe {
   }
 
   .playlists {
-    margin-top: 20px;
+    /* margin-top: 20px; */
     min-width: 500px;
     overflow: scroll;
     padding: 1rem;
@@ -400,6 +420,19 @@ iframe {
   .sort-by-text {
     visibility: visible;
     color: var(--text-color);
+  }
+
+  #player-detail-container,
+  #player-detail-header {
+    display: block;
+  }
+
+  #player {
+    height: 390px;
+  }
+
+  .playercontainer {
+    height: 600px;
   }
 }
 @media screen and (min-width: 1440px) {

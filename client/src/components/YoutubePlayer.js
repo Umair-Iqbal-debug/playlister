@@ -129,18 +129,6 @@ function YoutubePlayer(props) {
     store.addNewSong();
   };
 
-  const style = {
-    display: "flex",
-    alignItems: "center",
-    justifyContent: "center",
-    flexDirection: "column",
-    backgroundColor: "white",
-    borderRadius: "4px",
-    gap: "1rem",
-    height: "600px",
-    width: "100% ",
-  };
-
   let title = "",
     artist = "",
     playlistName = "";
@@ -154,19 +142,21 @@ function YoutubePlayer(props) {
   }
 
   return (
-    <Box sx={style}>
+    <div className="playercontainer">
       <div id="player">
         <CircularProgress />
       </div>
-      <Typography variant="h5">Now Playing</Typography>
-      <Box sx={{ textAlign: "left" }}>
+      <h2 variant="h5" id="player-detail-header">
+        Now Playing
+      </h2>
+      <div id="player-detail-container">
         <Typography variant="subtitle2">
           Playlist: {store.currentList && store.currentList.name}
         </Typography>
         <Typography variant="subtitle2">Song#: {currentIdx + 1}</Typography>
         <Typography variant="subtitle2">Title:{title}</Typography>
         <Typography variant="subtitle2">Artist: {artist}</Typography>
-      </Box>
+      </div>
       <PlayerControls
         player={player}
         handleNext={handleNext}
@@ -174,7 +164,7 @@ function YoutubePlayer(props) {
         toggleShuffle={toggleShuffle}
         shuffle={shuffle}
       />
-    </Box>
+    </div>
   );
 }
 
