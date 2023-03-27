@@ -65,7 +65,7 @@ export default function BasicTabs() {
   };
 
   return (
-    <Box sx={{ width: "100%", height: "100%", backgroundColor: "#051622" }}>
+    <Box sx={{ width: "100%", backgroundColor: "#051622" }}>
       <Box sx={{ borderBottom: 1, borderColor: "divider" }}>
         <Tabs
           value={value}
